@@ -22,8 +22,11 @@ int main(int argc,char **argv)
 
     DetectLine dl;
     dl.initializeImage("test1.GIF",argv);
-    dl.printImageMatrix();
+    //dl.printImageMatrix();
     //dl.writeImage("result.png");
+    
+    dl.applyKernel(1);
+    //dl.printResultMatrix();
     
     return 0; 
 }

@@ -25,6 +25,7 @@ public:
     
     int initializeImage(std::string path,char **argv);
     int printImageMatrix();
+    int printResultMatrix();
     int writeImage(std::string path);
     int applyKernel(int kernelNO);
     
