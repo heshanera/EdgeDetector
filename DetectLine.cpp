@@ -15,8 +15,6 @@
 
 #include "DetectLine.h"
 
-using namespace std; 
-using namespace Magick; 
 
 DetectLine::DetectLine() {}
 
@@ -24,11 +22,10 @@ DetectLine::DetectLine(const DetectLine& orig) {}
 
 DetectLine::~DetectLine() {}
 
-int DetectLine::initializeImage(string path,char **argv){
+int DetectLine::initializeImage(std::string path,char **argv){
     
-    
-    InitializeMagick(*argv);
-    Image image;
+    Magick::InitializeMagick(*argv);
+    Magick::Image image;
     try { 
       
         image.read(path);
@@ -38,10 +35,10 @@ int DetectLine::initializeImage(string path,char **argv){
         int w = image.columns();
         int h = image.rows();
         int range = pow(2, image.modulusDepth());
-        PixelPacket *pixels = image.getPixels(0, 0, w, h);
+        Magick::PixelPacket *pixels = image.getPixels(0, 0, w, h);
         int row = 0;
         int column = 0;
-        Color color = pixels[w * row + column];
+        Magick::Color color = pixels[w * row + column];
 
         // creating the pixel matrix
         this->imageMatrix = new float*[h];for(int i = 0; i < h; ++i) this->imageMatrix[i] = new float[w];
@@ -50,17 +47,17 @@ int DetectLine::initializeImage(string path,char **argv){
         
         for(row = 0; row < h-1; row++)
         {
-          for(column = 0; column < w-1; column++)
-          {
-            Color color = pixels[w * row + column];
-            //std::cout << (color.redQuantum() / range) << " ";
-            this->imageMatrix[row][column] = (color.redQuantum() / range);
-          }   
+            for(column = 0; column < w-1; column++)
+            {
+                Magick::Color color = pixels[w * row + column];
+                //std::cout << (color.redQuantum() / range) << " ";
+                this->imageMatrix[row][column] = (color.redQuantum() / range);
+            }   
           //std::cout<< endl;
         }    
         
-    } catch( Exception &error_ ) { 
-        cout << "Caught exception: " << error_.what() << endl; 
+    } catch(std::exception &error_ ) { 
+        std::cout << "Caught exception: " << error_.what() << std::endl; 
         return 1; 
     } 
     return 0; 
@@ -73,43 +70,55 @@ int DetectLine::printImageMatrix(){
     {
         for(int column = 0; column < (this->width)-1; column++)
         {
-            //std::cout << (color.redQuantum() / range);
-            //std::cout<< endl;
             std::cout<<this->imageMatrix[row][column]<<" ";
         } 
-        std::cout<< endl;
+        std::cout<< std::endl;
     }    
-
 }
 
 int DetectLine::writeImage(std::string path){
 
-    /*
-    Image image;
+    
+    Magick::Image image;
     //image.
     
-    image.setPixels(const ssize_t x_, const ssize_t y_, const size_t columns_, const size_t rows_);
+    image.setPixels(10, 20, 10, 10);
+    //image.writePixels(QuantumTypes quantum_, unsigned char *destination_);
     
     image.syncPixels();
-    image.write("horse.jpg");
-     */
+    //image.write("horse.jpg");
     
-    Image image("test1.GIF"); 
+    
+    /*
+    Magick::Image image("test1.GIF"); 
     // Ensure that there are no other references to this image.
     image.modifyImage();
     // Set the image type to TrueColor DirectClass representation.
-    image.type(TrueColorType);
+    image.type(Magick::TrueColorType);
     // Request pixel region with size 60x40, and top origin at 20x30 
-    ssize_t columns = 60; 
-    Quantum *pixel_cache = image.getPixels(20,30,columns,40); 
+    ssize_t columns = 20; 
+    Magick::PixelPacket* pixel_cache = image.getPixels(20,20,columns,20); 
     // Set pixel at column 5, and row 10 in the pixel cache to red. 
     ssize_t column = 5; 
     ssize_t row = 10; 
-    Quantum *pixel = pixel_cache+row*columns+column; 
-    *pixel = Color("red"); 
+    Magick::PixelPacket* pixel = pixel_cache+row*columns+column; 
+    *pixel = Magick::Color("red"); 
     // Save changes to underlying image .
     image.syncPixels();
-    image.write("horse.png");
+    image.write(path);
+    */
     
-    
+}
+
+int DetectLine::applyKernel(int kernelNO){
+
+    for(int row = 0; row < (this->height)-1; row++)
+    {
+        for(int column = 0; column < (this->width)-1; column++)
+        {
+            std::cout<<this->imageMatrix[row][column]<<" ";
+        } 
+        //std::cout<< std::endl;
+    }    
+
 }

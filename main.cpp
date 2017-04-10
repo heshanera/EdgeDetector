@@ -11,12 +11,8 @@
  * Created on April 10, 2017, 9:20 AM
  */
 
-#include <Magick++.h>
 #include <iostream>
 #include "DetectLine.h"
-
-using namespace std; 
-using namespace Magick; 
 
 /*
  * 
@@ -27,7 +23,7 @@ int main(int argc,char **argv)
     DetectLine dl;
     dl.initializeImage("test1.GIF",argv);
     dl.printImageMatrix();
-    dl.writeImage("");
+    //dl.writeImage("result.png");
     
     return 0; 
 }
