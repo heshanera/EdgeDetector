@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   DetectLine.h
  * Author: heshan
@@ -15,6 +9,7 @@
 #define DETECTLINE_H
 
 #include <iostream>
+#include <Magick++.h>
 
 
 class DetectLine {
@@ -30,6 +25,7 @@ public:
     int applyKernel(int kernelNO);
     
 private:
+    Magick::Image img;
     float **imageMatrix,**resultMatrix;
     int width, height;
     double range;

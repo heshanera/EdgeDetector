@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>/home/heshan/NetBeansProjects/Line Detection/DetectLine.h</itemPath>
+      <itemPath>/home/heshan/NetBeansProjects/Line Detection/Skeletonize.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -14,6 +15,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>/home/heshan/NetBeansProjects/Line Detection/DetectLine.cpp</itemPath>
+      <itemPath>/home/heshan/NetBeansProjects/Line Detection/Skeletonize.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -53,6 +55,16 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="/home/heshan/NetBeansProjects/Line Detection/Skeletonize.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/home/heshan/NetBeansProjects/Line Detection/Skeletonize.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -82,6 +94,16 @@
             flavor2="0">
       </item>
       <item path="/home/heshan/NetBeansProjects/Line Detection/DetectLine.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/home/heshan/NetBeansProjects/Line Detection/Skeletonize.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/home/heshan/NetBeansProjects/Line Detection/Skeletonize.h"
             ex="false"
             tool="3"
             flavor2="0">

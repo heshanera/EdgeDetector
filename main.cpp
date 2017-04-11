@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   main.cpp
  * Author: heshan
@@ -21,13 +15,22 @@ int main(int argc,char **argv)
 { 
 
     DetectLine dl;
+    
     dl.initializeImage("test1.GIF");
-    //dl.printImageMatrix();
+    dl.applyKernel(2);
+    dl.writeImage("result.png");
     
+    /*
+    dl.initializeImage("test2.GIF");
     dl.applyKernel(0);
-    //dl.printResultMatrix();
+    dl.writeImage("result2.png");
+    */
     
-    dl.writeImage("test1.GIF");
+    /*
+    dl.initializeImage("test3.GIF");
+    dl.applyKernel(1);
+    dl.writeImage("result3.png");
+    */
     
     return 0; 
 }

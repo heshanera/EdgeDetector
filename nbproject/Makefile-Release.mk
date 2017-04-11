@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/_ext/1146eab9/DetectLine.o \
+	${OBJECTDIR}/_ext/1146eab9/Skeletonize.o \
 	${OBJECTDIR}/main.o
 
 
@@ -67,6 +68,11 @@ ${OBJECTDIR}/_ext/1146eab9/DetectLine.o: /home/heshan/NetBeansProjects/Line\ Det
 	${MKDIR} -p ${OBJECTDIR}/_ext/1146eab9
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1146eab9/DetectLine.o /home/heshan/NetBeansProjects/Line\ Detection/DetectLine.cpp
+
+${OBJECTDIR}/_ext/1146eab9/Skeletonize.o: /home/heshan/NetBeansProjects/Line\ Detection/Skeletonize.cpp
+	${MKDIR} -p ${OBJECTDIR}/_ext/1146eab9
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1146eab9/Skeletonize.o /home/heshan/NetBeansProjects/Line\ Detection/Skeletonize.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}

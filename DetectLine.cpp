@@ -1,18 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   DetectLine.cpp
  * Author: heshan
  * 
  * Created on April 10, 2017, 9:06 PM
  */
-#include <Magick++.h>
 #include <iostream>
-
+#include <Magick++.h>
 #include "DetectLine.h"
 
 
@@ -27,6 +20,7 @@ int DetectLine::initializeImage(std::string path){
     
     Magick::InitializeMagick(NULL);
     Magick::Image image(path);
+    this->img = image;
     try { 
       
         image.type( Magick::GrayscaleType );
@@ -48,7 +42,6 @@ int DetectLine::initializeImage(std::string path){
             for(column = 0; column < w; column++)
             {
                 Magick::Color color = pixels[w * row + column];
-                //std::cout << (color.redQuantum()) << " ";
                 this->imageMatrix[row][column] = (color.redQuantum()/range)/256;
             }   
             //std::cout<< std::endl;
@@ -92,7 +85,14 @@ int DetectLine::applyKernel(int kernelNo){
     float **tmpKernel;
     tmpKernel = new float*[3]; for(int i = 0; i < 3; i++) {tmpKernel[i] = new float[3];}
     
-    // light lines against a dark background (0 - 3)
+    /**
+     * light lines against a dark background (0 - 3)
+     * 0 - horizontal
+     * 1 - vertical
+     * 2 - diagonal (/)
+     * 3 - diagonal (\)
+     * 
+     **/ 
     float kernel[4][3][3] =    {   
                                    { {-1,-1,-1},{2,2,2},{-1,-1,-1} },
                                    { {-1,2,-1},{-1,2,-1},{-1,2,-1} },
@@ -116,25 +116,17 @@ int DetectLine::applyKernel(int kernelNo){
                 for(int kernelColumn = 0; kernelColumn < 3; kernelColumn++)
                 {
                     pSum += (float)(this->imageMatrix[row + kernelRow][column + kernelColumn]*kernel[kernelNo][kernelRow][kernelColumn]);
-                    //std::cout<<kernel[kernelNo][kernelRow][kernelColumn]<<"  ";
                 } 
             }
             this->resultMatrix[row][column] = pSum;
-            //std::cout<<"row: "<<row<<" column: "<<column<<" pixelGrayScale: "<<pSum<<"\n";
-            
-            //std::cout<<pSum<<" ";
         } 
-        //std::cout<< std::endl;
     }   
-    //std::cout<<"height: "<<this->height<<" width: "<<this->width<<"\n";
 }
 
 int DetectLine::writeImage(std::string path){
 
-    
-    
-    Magick::Image image(path); 
-    // Ensure that there are no other references to this image.
+    Magick::Image image;
+    image = this->img;
     image.modifyImage();
     image.type(Magick::TrueColorType);
     ssize_t columns = this->width; 
@@ -146,12 +138,11 @@ int DetectLine::writeImage(std::string path){
         {
             Magick::ColorGray gColor(this->resultMatrix[j][i]);
             Magick::PixelPacket *pixel = pixel_cache+j*columns+i;    
-            *pixel = gColor;//Magick::Color("green");
-            //*pixel = Magick::Color("green");
+            *pixel = gColor;
         } 
     }
     image.syncPixels();
-    image.write("result.png");
+    image.write(path);
     
     return 0; 
    
