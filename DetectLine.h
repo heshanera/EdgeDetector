@@ -23,7 +23,7 @@ public:
     DetectLine(const DetectLine& orig);
     virtual ~DetectLine();
     
-    int initializeImage(std::string path,char **argv);
+    int initializeImage(std::string path);
     int printImageMatrix();
     int printResultMatrix();
     int writeImage(std::string path);

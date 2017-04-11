@@ -21,12 +21,13 @@ int main(int argc,char **argv)
 { 
 
     DetectLine dl;
-    dl.initializeImage("test1.GIF",argv);
+    dl.initializeImage("test1.GIF");
     //dl.printImageMatrix();
-    //dl.writeImage("result.png");
     
-    dl.applyKernel(1);
-    dl.printResultMatrix();
+    dl.applyKernel(0);
+    //dl.printResultMatrix();
+    
+    dl.writeImage("test1.GIF");
     
     return 0; 
 }

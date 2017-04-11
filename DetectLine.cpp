@@ -22,53 +22,52 @@ DetectLine::DetectLine(const DetectLine& orig) {}
 
 DetectLine::~DetectLine() {}
 
-int DetectLine::initializeImage(std::string path,char **argv){
+int DetectLine::initializeImage(std::string path){
     
-    Magick::InitializeMagick(*argv);
-    Magick::Image image;
+    
+    Magick::InitializeMagick(NULL);
+    Magick::Image image(path);
     try { 
       
-        image.read(path);
         image.type( Magick::GrayscaleType );
         image.modifyImage();
 
-        int w = image.columns();
-        int h = image.rows();
+        int w = image.columns(),h = image.rows();
+        int row = 0,column = 0;
         int range = pow(2, image.modulusDepth());
+        
         Magick::PixelPacket *pixels = image.getPixels(0, 0, w, h);
-        int row = 0;
-        int column = 0;
-        Magick::Color color = pixels[w * row + column];
 
         // creating the pixel matrix
         this->imageMatrix = new float*[h];for(int i = 0; i < h; ++i) this->imageMatrix[i] = new float[w];
         this->width = w; this->height = h;
         this->range = range;
         
-        for(row = 0; row < h-1; row++)
+        for(row = 0; row < h; row++)
         {
-            for(column = 0; column < w-1; column++)
+            for(column = 0; column < w; column++)
             {
                 Magick::Color color = pixels[w * row + column];
-                //std::cout << (color.redQuantum() / range) << " ";
-                this->imageMatrix[row][column] = (color.redQuantum() / range);
+                //std::cout << (color.redQuantum()) << " ";
+                this->imageMatrix[row][column] = (color.redQuantum()/range)/256;
             }   
-          //std::cout<< endl;
+            //std::cout<< std::endl;
         }    
         
     } catch(std::exception &error_ ) { 
         std::cout << "Caught exception: " << error_.what() << std::endl; 
         return 1; 
     } 
+    
     return 0; 
 
 }
 
 int DetectLine::printImageMatrix(){
     
-    for(int row = 0; row < (this->height)-1; row++)
+    for(int row = 0; row < (this->height); row++)
     {
-        for(int column = 0; column < (this->width)-1; column++)
+        for(int column = 0; column < (this->width); column++)
         {
             std::cout<<this->imageMatrix[row][column]<<" ";
         } 
@@ -78,48 +77,14 @@ int DetectLine::printImageMatrix(){
 
 int DetectLine::printResultMatrix(){
     
-    for(int row = 0; row < (this->height)-1; row++)
+    for(int row = 0; row < (this->height); row++)
     {
-        for(int column = 0; column < (this->width)-1; column++)
+        for(int column = 0; column < (this->width); column++)
         {
             std::cout<<this->resultMatrix[row][column]<<" ";
         } 
         std::cout<< std::endl;
     }    
-}
-
-int DetectLine::writeImage(std::string path){
-
-    
-    Magick::Image image;
-    //image.
-    
-    image.setPixels(10, 20, 10, 10);
-    //image.writePixels(QuantumTypes quantum_, unsigned char *destination_);
-    
-    image.syncPixels();
-    //image.write("horse.jpg");
-    
-    
-    /*
-    Magick::Image image("test1.GIF"); 
-    // Ensure that there are no other references to this image.
-    image.modifyImage();
-    // Set the image type to TrueColor DirectClass representation.
-    image.type(Magick::TrueColorType);
-    // Request pixel region with size 60x40, and top origin at 20x30 
-    ssize_t columns = 20; 
-    Magick::PixelPacket* pixel_cache = image.getPixels(20,20,columns,20); 
-    // Set pixel at column 5, and row 10 in the pixel cache to red. 
-    ssize_t column = 5; 
-    ssize_t row = 10; 
-    Magick::PixelPacket* pixel = pixel_cache+row*columns+column; 
-    *pixel = Magick::Color("red"); 
-    // Save changes to underlying image .
-    image.syncPixels();
-    image.write(path);
-    */
-    
 }
 
 int DetectLine::applyKernel(int kernelNo){
@@ -128,7 +93,7 @@ int DetectLine::applyKernel(int kernelNo){
     tmpKernel = new float*[3]; for(int i = 0; i < 3; i++) {tmpKernel[i] = new float[3];}
     
     // light lines against a dark background (0 - 3)
-    float kernel[4][3][3] =  {   
+    float kernel[4][3][3] =    {   
                                    { {-1,-1,-1},{2,2,2},{-1,-1,-1} },
                                    { {-1,2,-1},{-1,2,-1},{-1,2,-1} },
                                    { {-1,-1,2},{-1,2,-1},{2,-1,-1} },
@@ -140,24 +105,54 @@ int DetectLine::applyKernel(int kernelNo){
     this->resultMatrix = new float*[this->height];for(int i = 0; i < this->height; ++i) this->resultMatrix[i] = new float[this->width];
     
     
-    for(int row = 0; row < (this->height)-4; row++)
+    for(int row = 0; row < (this->height)-3; row++)
     {
-        for(int column = 0; column < (this->width)-4; column++)
+        for(int column = 0; column < (this->width)-3; column++)
         {
             
-            double pSum = 0;
+            float pSum = 0;
             for(int kernelRow = 0; kernelRow < 3; kernelRow++)
             {
                 for(int kernelColumn = 0; kernelColumn < 3; kernelColumn++)
                 {
-                    pSum += (this->imageMatrix[row + kernelRow][column + kernelColumn]*kernel[kernelNo][kernelRow][kernelColumn]);
+                    pSum += (float)(this->imageMatrix[row + kernelRow][column + kernelColumn]*kernel[kernelNo][kernelRow][kernelColumn]);
                     //std::cout<<kernel[kernelNo][kernelRow][kernelColumn]<<"  ";
                 } 
             }
             this->resultMatrix[row][column] = pSum;
+            //std::cout<<"row: "<<row<<" column: "<<column<<" pixelGrayScale: "<<pSum<<"\n";
+            
             //std::cout<<pSum<<" ";
         } 
         //std::cout<< std::endl;
     }   
+    //std::cout<<"height: "<<this->height<<" width: "<<this->width<<"\n";
+}
 
+int DetectLine::writeImage(std::string path){
+
+    
+    
+    Magick::Image image(path); 
+    // Ensure that there are no other references to this image.
+    image.modifyImage();
+    image.type(Magick::TrueColorType);
+    ssize_t columns = this->width; 
+    Magick::PixelPacket *pixel_cache = image.getPixels(0,0,this->width, this->height); 
+    
+    for(int i = 0; i < this->width; i++)
+    {
+        for(int j = 0; j < this->height; j++)
+        {
+            Magick::ColorGray gColor(this->resultMatrix[j][i]);
+            Magick::PixelPacket *pixel = pixel_cache+j*columns+i;    
+            *pixel = gColor;//Magick::Color("green");
+            //*pixel = Magick::Color("green");
+        } 
+    }
+    image.syncPixels();
+    image.write("result.png");
+    
+    return 0; 
+   
 }
