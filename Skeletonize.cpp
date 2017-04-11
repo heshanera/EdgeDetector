@@ -13,12 +13,11 @@
 
 #include "Skeletonize.h"
 
-Skeletonize::Skeletonize() {
-}
+Skeletonize::Skeletonize() {}
 
-Skeletonize::Skeletonize(const Skeletonize& orig) {
-}
+Skeletonize::Skeletonize(const Skeletonize& orig) {}
 
-Skeletonize::~Skeletonize() {
-}
+Skeletonize::~Skeletonize() {}
+
+
 

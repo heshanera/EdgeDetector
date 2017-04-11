@@ -16,20 +16,20 @@ int main(int argc,char **argv)
 
     DetectLine dl;
     
-    dl.initializeImage("test1.GIF");
+    dl.initializeImage("imgs/test1.GIF");
     dl.applyKernel(2);
-    dl.writeImage("result.png");
+    dl.writeImage("imgs/result.png");
     
     /*
-    dl.initializeImage("test2.GIF");
+    dl.initializeImage("imgs/test2.GIF");
     dl.applyKernel(0);
-    dl.writeImage("result2.png");
+    dl.writeImage("imgs/result2.png");
     */
     
     /*
-    dl.initializeImage("test3.GIF");
+    dl.initializeImage("imgs/test3.GIF");
     dl.applyKernel(1);
-    dl.writeImage("result3.png");
+    dl.writeImage("imgs/result3.png");
     */
     
     return 0; 
