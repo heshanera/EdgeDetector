@@ -26,7 +26,7 @@ int main(int argc,char **argv)
     //dl.writeImage("result.png");
     
     dl.applyKernel(1);
-    //dl.printResultMatrix();
+    dl.printResultMatrix();
     
     return 0; 
 }

@@ -50,7 +50,7 @@ int DetectLine::initializeImage(std::string path,char **argv){
             for(column = 0; column < w-1; column++)
             {
                 Magick::Color color = pixels[w * row + column];
-                std::cout << (color.redQuantum() / range) << " ";
+                //std::cout << (color.redQuantum() / range) << " ";
                 this->imageMatrix[row][column] = (color.redQuantum() / range);
             }   
           //std::cout<< endl;
@@ -124,43 +124,40 @@ int DetectLine::writeImage(std::string path){
 
 int DetectLine::applyKernel(int kernelNo){
 
-    float tmpKernel[3][3];
-    switch(kernelNo)
-    {
-        case 1:
-            tmpKernel[3][3] = this->kernelWH1[3][3];
-            break;
-        case 2:
-            tmpKernel[3][3] = this->kernelWH1[3][3];
-            break;    
-        case 3:
-            tmpKernel[3][3] = this->kernelWH1[3][3];
-            break;
-        case 4:
-            tmpKernel[3][3] = this->kernelWH1[3][3];
-            break;    
-    }
+    float **tmpKernel;
+    tmpKernel = new float*[3]; for(int i = 0; i < 3; i++) {tmpKernel[i] = new float[3];}
+    
+    // light lines against a dark background (0 - 3)
+    float kernel[4][3][3] =  {   
+                                   { {-1,-1,-1},{2,2,2},{-1,-1,-1} },
+                                   { {-1,2,-1},{-1,2,-1},{-1,2,-1} },
+                                   { {-1,-1,2},{-1,2,-1},{2,-1,-1} },
+                                   { {2,-1,-1},{-1,2,-1},{-1,-1,2} } 
+                                };
+     
+
     
     this->resultMatrix = new float*[this->height];for(int i = 0; i < this->height; ++i) this->resultMatrix[i] = new float[this->width];
     
-    for(int row = 0; row < (this->height)-1; row++)
+    
+    for(int row = 0; row < (this->height)-4; row++)
     {
-        for(int column = 0; column < (this->width)-1; column++)
+        for(int column = 0; column < (this->width)-4; column++)
         {
             
-            float pSum = 0;
+            double pSum = 0;
             for(int kernelRow = 0; kernelRow < 3; kernelRow++)
             {
                 for(int kernelColumn = 0; kernelColumn < 3; kernelColumn++)
                 {
-                    pSum += this->imageMatrix[row + kernelRow][column + kernelColumn]*tmpKernel[kernelRow][kernelColumn];
-                    //std::cout<<this->imageMatrix[row + kernelRow][column + kernelColumn];
+                    pSum += (this->imageMatrix[row + kernelRow][column + kernelColumn]*kernel[kernelNo][kernelRow][kernelColumn]);
+                    //std::cout<<kernel[kernelNo][kernelRow][kernelColumn]<<"  ";
                 } 
             }
             this->resultMatrix[row][column] = pSum;
-            //std::cout<<this->resultMatrix[row][column]<<" ";
+            //std::cout<<pSum<<" ";
         } 
         //std::cout<< std::endl;
-    }    
+    }   
 
 }

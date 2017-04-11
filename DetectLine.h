@@ -33,11 +33,7 @@ private:
     float **imageMatrix,**resultMatrix;
     int width, height;
     double range;
-    
-    float kernelWH1[3][3] = { {-1,-1,-1},{2,2,2},{-1,-1,-1} };
-    float kernelWV1[3][3] = { {-1,2,-1},{-1,2,-1},{-1,2,-1} };
-    float kernelWD1[3][3] = { {-1,-1,2},{-1,2,-1},{2,-1,-1} };
-    float kernelWD2[3][3] = { {2,-1,-1},{-1,2,-1},{-1,-1,2} };
+   
 };
 
 #endif /* DETECTLINE_H */
