@@ -12,26 +12,24 @@ Skeletonize::Skeletonize(std::string inputImage, std::string outputImage) {
     
     initializeImage(inputImage);
     reconfPixels();
-    printReconfedMatrix();
-    std::cout<<"\n\n\n";
-    getArticulationPoints();
-    printResultMatrix();
-    std::cout<<"\n\n\n";
-    removeBoundryPixels();
-    printReconfedMatrix();
     
-    while(1)
-    {
+    while(1) 
+    {    
         getArticulationPoints();
-        removeBoundryPixels();
-        
-        if (1)
-            break;
-        
+        //printBoundaryPixelMatrix();
+        removeBoundaryPixels();
+        //printBoundaryPixelMatrix();
+        //printReconfedMatrix();
+        if (this->interiorPixels == 0) break;
     }    
     
+    getArticulationPointsPhase2();
+    printBoundaryPixelMatrix();
+    removeBoundaryPixelsPhase2();
+    printBoundaryPixelMatrix();
     
-
+    writeImage(outputImage);
+    
 }
 
 Skeletonize::Skeletonize(const Skeletonize& orig) {}
@@ -44,6 +42,8 @@ int Skeletonize::initializeImage(std::string path){
     Magick::InitializeMagick(NULL);
     Magick::Image image(path);
     this->img = image;
+    this->interiorPixels = 0;
+    
     try { 
       
         image.type( Magick::GrayscaleType );
@@ -55,8 +55,12 @@ int Skeletonize::initializeImage(std::string path){
         
         Magick::PixelPacket *pixels = image.getPixels(0, 0, w, h);
 
-        // creating the pixel matrix
+        // creating the pixel matrices
         this->imageMatrix = new float*[h];for(int i = 0; i < h; ++i) this->imageMatrix[i] = new float[w];
+        this->reconfedImageMatrix = new float*[h];for(int i = 0; i < h; ++i) this->reconfedImageMatrix[i] = new float[w];
+        this->boundaryPixelMatrix = new float*[h];for(int i = 0; i < h; ++i) this->boundaryPixelMatrix[i] = new float[w];
+    
+        
         // storing meta data
         this->width = w; this->height = h;
         this->range = range;
@@ -82,13 +86,11 @@ int Skeletonize::initializeImage(std::string path){
 
 int Skeletonize::reconfPixels(){
 
-    // creating the pixel matrix
-    this->reconfedImageMatrix = new float*[this->height];for(int i = 0; i < this->height; ++i) this->reconfedImageMatrix[i] = new float[this->width];
     for(int row = 0; row < (this->height); row++)
     {
         for(int column = 0; column < (this->width); column++)
         {
-            if (this->imageMatrix[row][column] > 0 ) this->reconfedImageMatrix[row][column] = 1;
+            if (this->imageMatrix[row][column] > 0.5 ) this->reconfedImageMatrix[row][column] = 1;
             else this->reconfedImageMatrix[row][column] = 0;
         } 
     }   
@@ -96,7 +98,10 @@ int Skeletonize::reconfPixels(){
 
 int Skeletonize::getArticulationPoints(){
     
-    this->boundryPixelMatrix = new float*[this->height];for(int i = 0; i < this->height; ++i) this->boundryPixelMatrix[i] = new float[this->width];
+    
+    int tmpInPix = this->interiorPixels;
+    this->interiorPixels = 0;
+    
     for(int row = 0; row < (this->height); row++)
     {
         for(int column = 0; column < (this->width); column++)
@@ -107,48 +112,211 @@ int Skeletonize::getArticulationPoints(){
             //reconfedImageMatrix[row+1][column+1];
             if ( (column == 0) || (column == (this->width)-1) || (row == 0) || (row == (this->height) -1) ) {
             
-                boundryPixelMatrix[row][column] = reconfedImageMatrix[row][column];
+                boundaryPixelMatrix[row][column] = reconfedImageMatrix[row][column];
                 
             } else {
                 
                 if ((  reconfedImageMatrix[row-1][column] == 1) & 
                     (  reconfedImageMatrix[row][column-1] == 1) &
                     (  reconfedImageMatrix[row][column+1] == 1) & 
-                    (  reconfedImageMatrix[row+1][column] == 1)    ) boundryPixelMatrix[row][column] = 2;
-                else boundryPixelMatrix[row][column] = reconfedImageMatrix[row][column];  
+                    (  reconfedImageMatrix[row+1][column] == 1)    ) { boundaryPixelMatrix[row][column] = 2; this->interiorPixels++;}
+                else boundaryPixelMatrix[row][column] = reconfedImageMatrix[row][column];  
             }
             
         } 
-    }     
+    }
+    if ( tmpInPix == this->interiorPixels ) this->interiorPixels = 0;
 }
 
-int Skeletonize::removeBoundryPixels(){
+int Skeletonize::getArticulationPointsPhase2(){
     
     
+    int tmpInPix = this->interiorPixels;
+    this->interiorPixels = 0;
+    int tmpPoints;
     
     for(int row = 0; row < (this->height); row++)
     {
         for(int column = 0; column < (this->width); column++)
         {
-            //std::cout<<this->reconfedImageMatrix[row][column]<<" ";
-            if ( (column > 1) & (column < (this->width -1)) )
-            {        
-                if ( (boundryPixelMatrix[row][column-1] == 0) & (boundryPixelMatrix[row][column+1] == 2) ) reconfedImageMatrix[row][column] = 0;
-                if ( (boundryPixelMatrix[row][column-1] == 2) & (boundryPixelMatrix[row][column+1] == 0) ) reconfedImageMatrix[row][column] = 0;
+            
+            tmpPoints = 0;
+            if ( (column == 0) || (column == (this->width)-1) || (row == 0) || (row == (this->height) -1) ) {
+            
+                boundaryPixelMatrix[row][column] = reconfedImageMatrix[row][column];
+                
+            } else {
+                
+                if (  reconfedImageMatrix[row-1][column] == 1) tmpPoints++;
+                if (  reconfedImageMatrix[row][column-1] == 1) tmpPoints++;
+                if (  reconfedImageMatrix[row][column+1] == 1) tmpPoints++;
+                if (  reconfedImageMatrix[row+1][column] == 1) tmpPoints++;   
+                    
+                if (tmpPoints == 3) { boundaryPixelMatrix[row][column] = 3; this->interiorPixels++;}
+                else boundaryPixelMatrix[row][column] = reconfedImageMatrix[row][column];  
             }
             
-            if ( (row > 1) & (row < (this->height -1)) )
+        } 
+    }
+    if ( tmpInPix == this->interiorPixels ) this->interiorPixels = 0;
+}
+
+int Skeletonize::removeBoundaryPixels(){
+    
+    for(int row = 1; row < (this->height)-1; row++)
+    {
+        for(int column = 1; column < (this->width)-1; column++)
+        {   
+            if (boundaryPixelMatrix[row][column] == 1)
             {
-                if ( (boundryPixelMatrix[row-1][column] == 0) & (boundryPixelMatrix[row+1][column] == 2) ) reconfedImageMatrix[row][column] = 0;
-                if ( (boundryPixelMatrix[row-1][column] == 2) & (boundryPixelMatrix[row+1][column] == 0) ) reconfedImageMatrix[row][column] = 0;
-            }
+                /*
+                 *  |a2 a3 a4|
+                 *  |a1 ** a5|
+                 *  |a8 a7 a6|
+                 */
+                
+                int a1,a2,a3,a4,a5,a6,a7,a8;
+                
+                a1 = boundaryPixelMatrix[row][column-1];
+                a3 = boundaryPixelMatrix[row-1][column];
+                a5 = boundaryPixelMatrix[row][column+1];
+                a7 = boundaryPixelMatrix[row+1][column];
+                
+                a2 = boundaryPixelMatrix[row-1][column-1];
+                a4 = boundaryPixelMatrix[row-1][column+1];
+                a6 = boundaryPixelMatrix[row+1][column+1];
+                a8 = boundaryPixelMatrix[row+1][column-1];
+                
+                int tmpPointSum = 0;
+                
+                if( (a1 > 2) || (a2 > 2) || (a3 > 2) || (a4 > 2) || (a5 > 2) || (a6 > 2) || (a7 > 2) || (a8 > 2) )
+                {
+                    if (a1 > 0) tmpPointSum++;
+                    if (a3 > 0) tmpPointSum++;
+                    if (a5 > 0) tmpPointSum++;
+                    if (a7 > 0) tmpPointSum++;
+                    if (tmpPointSum > 2) 
+                    { 
+                        reconfedImageMatrix[row][column] = 0;
+                        boundaryPixelMatrix[row][column] = 0;
+                    } 
+                    else if (tmpPointSum == 2) 
+                    {
+                        int removable = 0;
+                        if( (a1 == 0) & (a2 == 0) & (a3 == 0) ) {
+                            removable = 1;
+                        } else if( (a1 == 0) & (a8 == 0) & (a7 == 0) ){
+                            removable = 1;
+                        } else if( (a3 == 0) & (a4 == 0) & (a5 == 0) ){
+                            removable = 1;
+                        } else if( (a5 == 0) & (a6 == 0) & (a7 == 0) ){
+                            removable = 1;
+                        }
+                        
+                        if (removable == 1)
+                        {
+                            reconfedImageMatrix[row][column] = 0;
+                            boundaryPixelMatrix[row][column] = 0;
+                        }    
+                    }     
+                }
+            }    
         } 
         //std::cout<<"\n";
     }   
 }
 
+int Skeletonize::removeBoundaryPixelsPhase2(){
+    
+    for(int row = 1; row < (this->height)-1; row++)
+    {
+        for(int column = 1; column < (this->width)-1; column++)
+        {   
+            /*
+             *  |a2 a3 a4|
+             *  |a1 ** a5|
+             *  |a8 a7 a6|
+             */
+
+            int a1,a2,a3,a4,a5,a6,a7,a8;
+
+            a1 = boundaryPixelMatrix[row][column-1];
+            a3 = boundaryPixelMatrix[row-1][column];
+            a5 = boundaryPixelMatrix[row][column+1];
+            a7 = boundaryPixelMatrix[row+1][column];
+
+            a2 = boundaryPixelMatrix[row-1][column-1];
+            a4 = boundaryPixelMatrix[row-1][column+1];
+            a6 = boundaryPixelMatrix[row+1][column+1];
+            a8 = boundaryPixelMatrix[row+1][column-1];
+
+            int tmpPointSum = 0;
+
+            if( (a1 > 2) || (a2 > 2) || (a3 > 2) || (a4 > 2) || (a5 > 2) || (a6 > 2) || (a7 > 2) || (a8 > 2) )
+            {
+                if (a1 > 0) tmpPointSum++;
+                if (a3 > 0) tmpPointSum++;
+                if (a5 > 0) tmpPointSum++;
+                if (a7 > 0) tmpPointSum++;
+                if (tmpPointSum > 2)
+                {
+                    reconfedImageMatrix[row][column] = 0;
+                    boundaryPixelMatrix[row][column] = 0;
+                } 
+                else if (tmpPointSum == 2) 
+                {
+                    int removable = 0;
+                    if( (a1 == 0) & (a2 == 0) & (a3 == 0) ) {
+                        removable = 1;
+                    } else if( (a1 == 0) & (a8 == 0) & (a7 == 0) ){
+                        removable = 1;
+                    } else if( (a3 == 0) & (a4 == 0) & (a5 == 0) ){
+                        removable = 1;
+                    } else if( (a5 == 0) & (a6 == 0) & (a7 == 0) ){
+                        removable = 1;
+                    }
+
+                    if (removable == 1)
+                    {
+                        reconfedImageMatrix[row][column] = 0;
+                        boundaryPixelMatrix[row][column] = 0;
+                    }    
+                }
+            }  
+        } 
+        //std::cout<<"\n";
+    }   
+}
+
+
+int Skeletonize::writeImage(std::string path){
+
+    Magick::Image image;
+    image = this->img;
+    image.modifyImage();
+    image.type(Magick::TrueColorType);
+    ssize_t columns = this->width; 
+    Magick::PixelPacket *pixel_cache = image.getPixels(0,0,this->width, this->height); 
+    
+    for(int i = 0; i < this->width; i++)
+    {
+        for(int j = 0; j < this->height; j++)
+        {
+            Magick::ColorGray gColor(this->reconfedImageMatrix[j][i]);
+            Magick::PixelPacket *pixel = pixel_cache+j*columns+i;    
+            *pixel = gColor;
+        } 
+    }
+    image.syncPixels();
+    image.write(path);
+    
+    return 0; 
+   
+}
+
 int Skeletonize::printReconfedMatrix(){
     
+    std::cout<<"Reconfigured Matrix: \n";
     for(int row = 0; row < (this->height); row++)
     {
         for(int column = 0; column < (this->width); column++)
@@ -157,16 +325,19 @@ int Skeletonize::printReconfedMatrix(){
         } 
         std::cout<<"\n";
     }   
+    std::cout<<"\n\n\n\n";
 }
 
-int Skeletonize::printResultMatrix(){
+int Skeletonize::printBoundaryPixelMatrix(){
     
+    std::cout<<"Boundary Pixel Matrix: \n";
     for(int row = 0; row < (this->height); row++)
     {
         for(int column = 0; column < (this->width); column++)
         {
-            std::cout<<this->boundryPixelMatrix[row][column]<<" ";
+            std::cout<<this->boundaryPixelMatrix[row][column]<<" ";
         } 
         std::cout<<"\n";
     }   
+    std::cout<<"\n\n\n\n";
 }

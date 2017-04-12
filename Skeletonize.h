@@ -20,16 +20,20 @@ public:
     int initializeImage(std::string path);
     int reconfPixels();
     int getArticulationPoints();
-    int removeBoundryPixels();
+    int getArticulationPointsPhase2();
+    int removeBoundaryPixels();
+    int removeBoundaryPixelsPhase2();
+    int writeImage(std::string path);
     
     int printReconfedMatrix();
-    int printResultMatrix();
+    int printBoundaryPixelMatrix();
     
 private:
     Magick::Image img;
-    float **imageMatrix,**reconfedImageMatrix,**boundryPixelMatrix;
+    float **imageMatrix,**reconfedImageMatrix,**boundaryPixelMatrix;
     int width, height;
     double range;
+    int interiorPixels;
 
 };
 

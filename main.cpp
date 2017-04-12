@@ -41,7 +41,10 @@ int main(int argc,char **argv)
     
     Skeletonize skeletonize(inputImage,skeletonizdImage);
     
-    
+    DetectLine dl;
+    dl.initializeImage("imgs/test1.GIF");
+    dl.applyKernel(3);
+    dl.writeImage(outputImage);
     
     return 0; 
 }
