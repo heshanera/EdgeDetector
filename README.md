@@ -1,5 +1,5 @@
 # Line Detection
-line detection of images
+line detection of images.
 
 ## Initial Image
 ![sourceImg](https://github.com/heshanera/lineDetection/blob/master/imgs/test1.png) 
@@ -10,7 +10,7 @@ process of reducing foreground regions in a binary image.
 ![skeletonizedImg](https://github.com/heshanera/lineDetection/blob/master/imgs/skdtest1.png)
 
 ## Convolution
-applying the kernels to the skeletonized image detect the lines.
+applying the kernels to the skeletonized image to detect the lines.
 
 #### Kernels
 ![kernels](https://github.com/heshanera/lineDetection/blob/master/imgs/kernels.png)
