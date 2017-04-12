@@ -14,7 +14,7 @@
 
 class DetectLine {
 public:
-    DetectLine();
+    DetectLine(std::string inputImage, std::string outputImage, int kernelNo);
     DetectLine(const DetectLine& orig);
     virtual ~DetectLine();
     

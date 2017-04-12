@@ -9,7 +9,13 @@
 #include "DetectLine.h"
 
 
-DetectLine::DetectLine() {}
+DetectLine::DetectLine(std::string inputImage, std::string outputImage, int kernelNo) {
+
+    initializeImage(inputImage);
+    applyKernel(kernelNo);
+    writeImage(outputImage);
+
+}
 
 DetectLine::DetectLine(const DetectLine& orig) {}
 
@@ -28,7 +34,7 @@ int DetectLine::initializeImage(std::string path){
 
         int w = image.columns(),h = image.rows();
         int row = 0,column = 0;
-        int range = pow(2, image.modulusDepth());
+        int range = 256; //pow(2, image.modulusDepth());
         
         Magick::PixelPacket *pixels = image.getPixels(0, 0, w, h);
 
@@ -113,7 +119,12 @@ int DetectLine::writeImage(std::string path){
     {
         for(int j = 0; j < this->height; j++)
         {
-            Magick::ColorGray gColor(this->resultMatrix[j][i]);
+            // thresholding the values
+            float pVal = this->resultMatrix[j][i];
+            if ( pVal > 2 ) { pVal = 1; }
+            else pVal = 0;
+            
+            Magick::ColorGray gColor(pVal);
             Magick::PixelPacket *pixel = pixel_cache+j*columns+i;    
             *pixel = gColor;
         } 

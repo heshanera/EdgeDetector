@@ -24,9 +24,9 @@ Skeletonize::Skeletonize(std::string inputImage, std::string outputImage) {
     }    
     
     getArticulationPointsPhase2();
-    printBoundaryPixelMatrix();
     removeBoundaryPixelsPhase2();
-    printBoundaryPixelMatrix();
+    //printBoundaryPixelMatrix();
+    //printReconfedMatrix();
     
     writeImage(outputImage);
     
@@ -90,7 +90,7 @@ int Skeletonize::reconfPixels(){
     {
         for(int column = 0; column < (this->width); column++)
         {
-            if (this->imageMatrix[row][column] > 0.5 ) this->reconfedImageMatrix[row][column] = 1;
+            if (this->imageMatrix[row][column] > 0.7 ) this->reconfedImageMatrix[row][column] = 1; // thresholding
             else this->reconfedImageMatrix[row][column] = 0;
         } 
     }   
@@ -152,7 +152,7 @@ int Skeletonize::getArticulationPointsPhase2(){
                 if (  reconfedImageMatrix[row][column+1] == 1) tmpPoints++;
                 if (  reconfedImageMatrix[row+1][column] == 1) tmpPoints++;   
                     
-                if (tmpPoints == 3) { boundaryPixelMatrix[row][column] = 3; this->interiorPixels++;}
+                if (tmpPoints == 3) { boundaryPixelMatrix[row][column] = 3; reconfedImageMatrix[row][column] = 1; this->interiorPixels++;}
                 else boundaryPixelMatrix[row][column] = reconfedImageMatrix[row][column];  
             }
             
@@ -197,8 +197,8 @@ int Skeletonize::removeBoundaryPixels(){
                     if (a7 > 0) tmpPointSum++;
                     if (tmpPointSum > 2) 
                     { 
-                        reconfedImageMatrix[row][column] = 0;
                         boundaryPixelMatrix[row][column] = 0;
+                        reconfedImageMatrix[row][column] = 0;
                     } 
                     else if (tmpPointSum == 2) 
                     {
@@ -215,8 +215,8 @@ int Skeletonize::removeBoundaryPixels(){
                         
                         if (removable == 1)
                         {
-                            reconfedImageMatrix[row][column] = 0;
                             boundaryPixelMatrix[row][column] = 0;
+                            reconfedImageMatrix[row][column] = 0;
                         }    
                     }     
                 }
@@ -260,8 +260,8 @@ int Skeletonize::removeBoundaryPixelsPhase2(){
                 if (a7 > 0) tmpPointSum++;
                 if (tmpPointSum > 2)
                 {
-                    reconfedImageMatrix[row][column] = 0;
                     boundaryPixelMatrix[row][column] = 0;
+                    reconfedImageMatrix[row][column] = 0;
                 } 
                 else if (tmpPointSum == 2) 
                 {
@@ -278,8 +278,8 @@ int Skeletonize::removeBoundaryPixelsPhase2(){
 
                     if (removable == 1)
                     {
-                        reconfedImageMatrix[row][column] = 0;
                         boundaryPixelMatrix[row][column] = 0;
+                        reconfedImageMatrix[row][column] = 0;
                     }    
                 }
             }  
