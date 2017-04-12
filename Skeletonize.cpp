@@ -8,7 +8,31 @@
 #include <Magick++.h>
 #include "Skeletonize.h"
 
-Skeletonize::Skeletonize() {}
+Skeletonize::Skeletonize(std::string inputImage, std::string outputImage) {
+    
+    initializeImage(inputImage);
+    reconfPixels();
+    printReconfedMatrix();
+    std::cout<<"\n\n\n";
+    getArticulationPoints();
+    printResultMatrix();
+    std::cout<<"\n\n\n";
+    removeBoundryPixels();
+    printReconfedMatrix();
+    
+    while(1)
+    {
+        getArticulationPoints();
+        removeBoundryPixels();
+        
+        if (1)
+            break;
+        
+    }    
+    
+    
+
+}
 
 Skeletonize::Skeletonize(const Skeletonize& orig) {}
 
@@ -72,7 +96,7 @@ int Skeletonize::reconfPixels(){
 
 int Skeletonize::getArticulationPoints(){
     
-    this->resultMatrix = new float*[this->height];for(int i = 0; i < this->height; ++i) this->resultMatrix[i] = new float[this->width];
+    this->boundryPixelMatrix = new float*[this->height];for(int i = 0; i < this->height; ++i) this->boundryPixelMatrix[i] = new float[this->width];
     for(int row = 0; row < (this->height); row++)
     {
         for(int column = 0; column < (this->width); column++)
@@ -83,19 +107,44 @@ int Skeletonize::getArticulationPoints(){
             //reconfedImageMatrix[row+1][column+1];
             if ( (column == 0) || (column == (this->width)-1) || (row == 0) || (row == (this->height) -1) ) {
             
-                resultMatrix[row][column] = reconfedImageMatrix[row][column];
+                boundryPixelMatrix[row][column] = reconfedImageMatrix[row][column];
                 
             } else {
                 
                 if ((  reconfedImageMatrix[row-1][column] == 1) & 
                     (  reconfedImageMatrix[row][column-1] == 1) &
                     (  reconfedImageMatrix[row][column+1] == 1) & 
-                    (  reconfedImageMatrix[row+1][column] == 1)    ) resultMatrix[row][column] = 2;
-                else resultMatrix[row][column] = reconfedImageMatrix[row][column];  
+                    (  reconfedImageMatrix[row+1][column] == 1)    ) boundryPixelMatrix[row][column] = 2;
+                else boundryPixelMatrix[row][column] = reconfedImageMatrix[row][column];  
             }
             
         } 
     }     
+}
+
+int Skeletonize::removeBoundryPixels(){
+    
+    
+    
+    for(int row = 0; row < (this->height); row++)
+    {
+        for(int column = 0; column < (this->width); column++)
+        {
+            //std::cout<<this->reconfedImageMatrix[row][column]<<" ";
+            if ( (column > 1) & (column < (this->width -1)) )
+            {        
+                if ( (boundryPixelMatrix[row][column-1] == 0) & (boundryPixelMatrix[row][column+1] == 2) ) reconfedImageMatrix[row][column] = 0;
+                if ( (boundryPixelMatrix[row][column-1] == 2) & (boundryPixelMatrix[row][column+1] == 0) ) reconfedImageMatrix[row][column] = 0;
+            }
+            
+            if ( (row > 1) & (row < (this->height -1)) )
+            {
+                if ( (boundryPixelMatrix[row-1][column] == 0) & (boundryPixelMatrix[row+1][column] == 2) ) reconfedImageMatrix[row][column] = 0;
+                if ( (boundryPixelMatrix[row-1][column] == 2) & (boundryPixelMatrix[row+1][column] == 0) ) reconfedImageMatrix[row][column] = 0;
+            }
+        } 
+        //std::cout<<"\n";
+    }   
 }
 
 int Skeletonize::printReconfedMatrix(){
@@ -116,7 +165,7 @@ int Skeletonize::printResultMatrix(){
     {
         for(int column = 0; column < (this->width); column++)
         {
-            std::cout<<this->resultMatrix[row][column]<<" ";
+            std::cout<<this->boundryPixelMatrix[row][column]<<" ";
         } 
         std::cout<<"\n";
     }   

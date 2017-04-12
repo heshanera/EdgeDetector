@@ -13,20 +13,21 @@
 
 class Skeletonize {
 public:
-    Skeletonize();
+    Skeletonize(std::string inputImage, std::string outputImage);
     Skeletonize(const Skeletonize& orig);
     virtual ~Skeletonize();
     
     int initializeImage(std::string path);
     int reconfPixels();
     int getArticulationPoints();
+    int removeBoundryPixels();
     
     int printReconfedMatrix();
     int printResultMatrix();
     
 private:
     Magick::Image img;
-    float **imageMatrix,**reconfedImageMatrix,**resultMatrix;
+    float **imageMatrix,**reconfedImageMatrix,**boundryPixelMatrix;
     int width, height;
     double range;
 

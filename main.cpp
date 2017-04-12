@@ -35,13 +35,12 @@ int main(int argc,char **argv)
     dl.writeImage("imgs/result3.png");
     */
     
-    Skeletonize sk;
-    sk.initializeImage("imgs/test1.GIF");
-    sk.reconfPixels();
-    sk.printReconfedMatrix();
-    std::cout<<"\n\n\n";
-    sk.getArticulationPoints();
-    sk.printResultMatrix();
+    std::string inputImage = "imgs/test1.GIF"; 
+    std::string skeletonizdImage = "imgs/skdtest1.png"; 
+    std::string outputImage = "imgs/result.png"; 
+    
+    Skeletonize skeletonize(inputImage,skeletonizdImage);
+    
     
     
     return 0; 
