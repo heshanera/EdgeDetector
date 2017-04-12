@@ -15,14 +15,14 @@ applying the kernels to the skeletonized image detect the lines.
 #### Kernels
 ![kernels](https://github.com/heshanera/lineDetection/blob/master/imgs/kernels.png)
 
-##### applying kernel1
+##### Applying kernel1
 ![kernel1](https://github.com/heshanera/lineDetection/blob/master/imgs/result1.png)
 
-#### applying kernel2
+##### Applying kernel2
 ![kernel2](https://github.com/heshanera/lineDetection/blob/master/imgs/result2.png)
 
-#### applying kernel3
+##### Applying kernel3
 ![kernel3](https://github.com/heshanera/lineDetection/blob/master/imgs/result3.png)
 
-#### applying kernel4
+##### Applying kernel4
 ![kernel4](https://github.com/heshanera/lineDetection/blob/master/imgs/result4.png)
