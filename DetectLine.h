@@ -19,10 +19,11 @@ public:
     virtual ~DetectLine();
     
     int initializeImage(std::string path);
-    int printImageMatrix();
-    int printResultMatrix();
     int writeImage(std::string path);
     int applyKernel(int kernelNO);
+    
+    int printImageMatrix();
+    int printResultMatrix();
     
 private:
     Magick::Image img;

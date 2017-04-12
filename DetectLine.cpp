@@ -34,6 +34,7 @@ int DetectLine::initializeImage(std::string path){
 
         // creating the pixel matrix
         this->imageMatrix = new float*[h];for(int i = 0; i < h; ++i) this->imageMatrix[i] = new float[w];
+        // storing meta data
         this->width = w; this->height = h;
         this->range = range;
         
@@ -54,30 +55,6 @@ int DetectLine::initializeImage(std::string path){
     
     return 0; 
 
-}
-
-int DetectLine::printImageMatrix(){
-    
-    for(int row = 0; row < (this->height); row++)
-    {
-        for(int column = 0; column < (this->width); column++)
-        {
-            std::cout<<this->imageMatrix[row][column]<<" ";
-        } 
-        std::cout<< std::endl;
-    }    
-}
-
-int DetectLine::printResultMatrix(){
-    
-    for(int row = 0; row < (this->height); row++)
-    {
-        for(int column = 0; column < (this->width); column++)
-        {
-            std::cout<<this->resultMatrix[row][column]<<" ";
-        } 
-        std::cout<< std::endl;
-    }    
 }
 
 int DetectLine::applyKernel(int kernelNo){
@@ -146,4 +123,28 @@ int DetectLine::writeImage(std::string path){
     
     return 0; 
    
+}
+
+int DetectLine::printImageMatrix(){
+    
+    for(int row = 0; row < (this->height); row++)
+    {
+        for(int column = 0; column < (this->width); column++)
+        {
+            std::cout<<this->imageMatrix[row][column]<<" ";
+        } 
+        std::cout<< std::endl;
+    }    
+}
+
+int DetectLine::printResultMatrix(){
+    
+    for(int row = 0; row < (this->height); row++)
+    {
+        for(int column = 0; column < (this->width); column++)
+        {
+            std::cout<<this->resultMatrix[row][column]<<" ";
+        } 
+        std::cout<< std::endl;
+    }    
 }

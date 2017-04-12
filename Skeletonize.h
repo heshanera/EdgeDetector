@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   Skeletonize.h
  * Author: heshan
@@ -14,12 +8,27 @@
 #ifndef SKELETONIZE_H
 #define SKELETONIZE_H
 
+#include <iostream>
+#include <Magick++.h>
+
 class Skeletonize {
 public:
     Skeletonize();
     Skeletonize(const Skeletonize& orig);
     virtual ~Skeletonize();
+    
+    int initializeImage(std::string path);
+    int reconfPixels();
+    int getArticulationPoints();
+    
+    int printReconfedMatrix();
+    int printResultMatrix();
+    
 private:
+    Magick::Image img;
+    float **imageMatrix,**reconfedImageMatrix,**resultMatrix;
+    int width, height;
+    double range;
 
 };
 
