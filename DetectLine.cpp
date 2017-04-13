@@ -121,7 +121,7 @@ int DetectLine::writeImage(std::string path){
         {
             // thresholding the values
             float pVal = this->resultMatrix[j][i];
-            std::cout<<pVal<<"\n";
+            //std::cout<<pVal<<"\n";
             if ( pVal > 3 ) { pVal = 1; }
             else pVal = 0;
             
