@@ -121,7 +121,8 @@ int DetectLine::writeImage(std::string path){
         {
             // thresholding the values
             float pVal = this->resultMatrix[j][i];
-            if ( pVal > 2 ) { pVal = 1; }
+            std::cout<<pVal<<"\n";
+            if ( pVal > 3 ) { pVal = 1; }
             else pVal = 0;
             
             Magick::ColorGray gColor(pVal);
