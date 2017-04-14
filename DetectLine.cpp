@@ -57,17 +57,13 @@ int DetectLine::initializeImage(std::string path){
     } catch(std::exception &error_ ) { 
         std::cout << "Caught exception: " << error_.what() << std::endl; 
         return 1; 
-    } 
-    
+    }
     return 0; 
 
 }
 
 int DetectLine::applyKernel(int kernelNo){
 
-    float **tmpKernel;
-    tmpKernel = new float*[3]; for(int i = 0; i < 3; i++) {tmpKernel[i] = new float[3];}
-    
     /**
      * light lines against a dark background (0 - 3)
      * 0 - horizontal
@@ -103,7 +99,8 @@ int DetectLine::applyKernel(int kernelNo){
             }
             this->resultMatrix[row][column] = pSum;
         } 
-    }   
+    } 
+    return 0;
 }
 
 int DetectLine::writeImage(std::string path){
@@ -146,7 +143,8 @@ int DetectLine::printImageMatrix(){
             std::cout<<this->imageMatrix[row][column]<<" ";
         } 
         std::cout<< std::endl;
-    }    
+    }
+    return 0;
 }
 
 int DetectLine::printResultMatrix(){
@@ -158,5 +156,6 @@ int DetectLine::printResultMatrix(){
             std::cout<<this->resultMatrix[row][column]<<" ";
         } 
         std::cout<< std::endl;
-    }    
+    }  
+    return 0;  
 }

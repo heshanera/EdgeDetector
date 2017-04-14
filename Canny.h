@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   Canny.h
  * Author: heshan
@@ -14,12 +8,28 @@
 #ifndef CANNY_H
 #define CANNY_H
 
+#include <iostream>
+#include <Magick++.h>
+
 class Canny {
 public:
-    Canny();
+    Canny(std::string inputImage, std::string outputImage, int smoothType);
     Canny(const Canny& orig);
     virtual ~Canny();
+    
+    int initializeImage(std::string path);
+    int gaussianFilter();
+    int meanFilter();
+    int threshold();
+    int writeImage(std::string path);
+    
+    int printResultMatrix();
+    
 private:
+    Magick::Image img;
+    float **imageMatrix,**resultMatrix;
+    int width, height;
+    double range;
 
 };
 

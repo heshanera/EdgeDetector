@@ -8,13 +8,14 @@
 #include <iostream>
 #include "DetectLine.h"
 #include "Skeletonize.h"
+#include "Canny.h"
 
 /*
  * 
  */
 int main(int argc,char **argv) 
 { 
-
+    /*
     std::string inputImage = "imgs/test1.png"; 
     std::string skeletonizdImage = "imgs/skdtest1.png"; 
     
@@ -29,6 +30,13 @@ int main(int argc,char **argv)
     DetectLine detectline2(skeletonizdImage,outputImage2,1);
     DetectLine detectline3(skeletonizdImage,outputImage3,2);
     DetectLine detectline4(skeletonizdImage,outputImage4,3);
+     * 
+     */
+    
+    std::string inputImage2 = "imgs/test2.GIF";
+    std::string outputImage2 = "imgs/testCanny.png";
+    
+    Canny canny(inputImage2,outputImage2,1);
     
     
     return 0; 

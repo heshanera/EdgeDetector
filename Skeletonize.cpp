@@ -94,6 +94,7 @@ int Skeletonize::reconfPixels(){
             else this->reconfedImageMatrix[row][column] = 0;
         } 
     }   
+    return 0;
 }    
 
 int Skeletonize::getArticulationPoints(){
@@ -126,6 +127,7 @@ int Skeletonize::getArticulationPoints(){
         } 
     }
     if ( tmpInPix == this->interiorPixels ) this->interiorPixels = 0;
+    return 0;
 }
 
 int Skeletonize::getArticulationPointsPhase2(){
@@ -159,6 +161,7 @@ int Skeletonize::getArticulationPointsPhase2(){
         } 
     }
     if ( tmpInPix == this->interiorPixels ) this->interiorPixels = 0;
+    return 0;
 }
 
 int Skeletonize::removeBoundaryPixels(){
@@ -224,6 +227,7 @@ int Skeletonize::removeBoundaryPixels(){
         } 
         //std::cout<<"\n";
     }   
+    return 0;
 }
 
 int Skeletonize::removeBoundaryPixelsPhase2(){
@@ -286,6 +290,7 @@ int Skeletonize::removeBoundaryPixelsPhase2(){
         } 
         //std::cout<<"\n";
     }   
+    return 0;
 }
 
 
@@ -311,7 +316,6 @@ int Skeletonize::writeImage(std::string path){
     image.write(path);
     
     return 0; 
-   
 }
 
 int Skeletonize::printReconfedMatrix(){
@@ -326,6 +330,7 @@ int Skeletonize::printReconfedMatrix(){
         std::cout<<"\n";
     }   
     std::cout<<"\n\n\n\n";
+    return 0;
 }
 
 int Skeletonize::printBoundaryPixelMatrix(){
@@ -340,4 +345,5 @@ int Skeletonize::printBoundaryPixelMatrix(){
         std::cout<<"\n";
     }   
     std::cout<<"\n\n\n\n";
+    return 0;
 }
