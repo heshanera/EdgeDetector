@@ -34,7 +34,7 @@ int DetectLine::initializeImage(std::string path){
 
         int w = image.columns(),h = image.rows();
         int row = 0,column = 0;
-        int range = 256; //pow(2, image.modulusDepth());
+        int range = 2; //pow(2, image.modulusDepth());
         
         Magick::PixelPacket *pixels = image.getPixels(0, 0, w, h);
 

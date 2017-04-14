@@ -36,7 +36,17 @@ int main(int argc,char **argv)
     std::string inputImage2 = "imgs/test2.GIF";
     std::string outputImage2 = "imgs/testCanny.png";
     
+    std::string outputImage5 = "imgs/result5.png";
+    std::string outputImage6 = "imgs/result6.png";
+    std::string outputImage7 = "imgs/result7.png";
+    std::string outputImage8 = "imgs/result8.png";
+    
     Canny canny(inputImage2,outputImage2,1);
+    
+    DetectLine detectline5(outputImage2,outputImage5,0);
+    DetectLine detectline6(outputImage2,outputImage6,1);
+    DetectLine detectline7(outputImage2,outputImage7,2);
+    DetectLine detectline8(outputImage2,outputImage8,3);
     
     
     return 0; 

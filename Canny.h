@@ -18,6 +18,7 @@ public:
     virtual ~Canny();
     
     int initializeImage(std::string path);
+    int grayScale();
     int gaussianFilter();
     int meanFilter();
     int threshold();

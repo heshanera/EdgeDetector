@@ -13,6 +13,7 @@ Canny::Canny(std::string inputImage, std::string outputImage, int smoothType) {
 
     initializeImage(inputImage);
     gaussianFilter();
+    meanFilter();
     //printResultMatrix();
     threshold();
     writeImage(outputImage);
@@ -109,11 +110,7 @@ int Canny::gaussianFilter(){
                     } 
                 }
                 this->resultMatrix[row][column] = ( pSum/273 );
-            
-            }
-            
-            
-            
+            }        
         } 
     } 
     
@@ -124,20 +121,16 @@ int Canny::meanFilter(){
 
     
     /**
-     *          | 1 4  7  4  1 |
-     *          | 4 16 26 16 4 |
-     *    1/273 | 7 26 41 26 7 |
-     *          | 4 16 26 16 4 |
-     *          | 1 4  7  4  1 |
-     * 
+     *          | 1 1 1 |
+     *      1/9 | 1 1 1 |
+     *          | 1 1 1 |
+     *          
      **/ 
     
-    float kernel[5][5] =    {   
-                                { 1, 4,  7,  4,  1 },
-                                { 4, 16, 26, 16, 4 },
-                                { 7, 26, 41, 26, 7 },
-                                { 4, 16, 26, 16, 4 }, 
-                                { 1, 4,  7,  4,  1 }
+    float kernel[3][3] =    {   
+                                { 1, 1, 1 },
+                                { 1, 1, 1 },
+                                { 1, 1, 1 }
                             };
      
 
@@ -150,25 +143,22 @@ int Canny::meanFilter(){
         for(int column = 0; column < (this->width); column++)
         {
             float pSum = 0;
-            if ( (row >= (this->height)-5) || (column >= (this->width)-5) ){
+            if ( (row >= (this->height)-3) || (column >= (this->width)-3) ){
             
                 this->resultMatrix[row][column] = this->imageMatrix[row][column];
             
             } else {
                 
-                for(int kernelRow = 0; kernelRow < 5; kernelRow++)
+                for(int kernelRow = 0; kernelRow < 3; kernelRow++)
                 {
-                    for(int kernelColumn = 0; kernelColumn < 5; kernelColumn++)
+                    for(int kernelColumn = 0; kernelColumn < 3; kernelColumn++)
                     {
                         pSum += (float)(this->imageMatrix[row + kernelRow][column + kernelColumn]*kernel[kernelRow][kernelColumn]);
                     } 
                 }
-                this->resultMatrix[row][column] = ( pSum/273 );
+                this->resultMatrix[row][column] = ( pSum/9 );
             
-            }
-            
-            
-            
+            } 
         } 
     } 
     
@@ -182,7 +172,7 @@ int Canny::threshold(){
     {
         for(int column = 0; column < (this->width); column++)
         {
-            pVal = this->resultMatrix[row][column];
+            pVal = this->imageMatrix[row][column];
             if (pVal > 0.5) pVal = 1; else pVal = 0;
             this->resultMatrix[row][column] = pVal;
         } 
@@ -212,6 +202,7 @@ int Canny::writeImage(std::string path){
     image.write(path);
     
     return 0; 
+   
 }
 
 int Canny::printResultMatrix(){

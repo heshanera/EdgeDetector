@@ -8,10 +8,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/heshan/NetBeansProjects/Line%20Detection/main.cpp</file>
-            <file>file:/home/heshan/NetBeansProjects/Line%20Detection/Skeletonize.cpp</file>
-            <file>file:/home/heshan/NetBeansProjects/Line%20Detection/Skeletonize.h</file>
+            <file>file:/home/heshan/NetBeansProjects/Line%20Detection/Canny.h</file>
+            <file>file:/home/heshan/NetBeansProjects/Line%20Detection/Canny.cpp</file>
             <file>file:/home/heshan/NetBeansProjects/Line%20Detection/DetectLine.cpp</file>
-            <file>file:/home/heshan/NetBeansProjects/Line%20Detection/DetectLine.h</file>
         </group>
     </open-files>
 </project-private>
