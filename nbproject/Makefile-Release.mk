@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/_ext/1146eab9/Canny.o \
 	${OBJECTDIR}/_ext/1146eab9/DetectLine.o \
 	${OBJECTDIR}/_ext/1146eab9/Skeletonize.o \
 	${OBJECTDIR}/main.o
@@ -63,6 +64,11 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/line_detection: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/line_detection ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/_ext/1146eab9/Canny.o: /home/heshan/NetBeansProjects/Line\ Detection/Canny.cpp
+	${MKDIR} -p ${OBJECTDIR}/_ext/1146eab9
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1146eab9/Canny.o /home/heshan/NetBeansProjects/Line\ Detection/Canny.cpp
 
 ${OBJECTDIR}/_ext/1146eab9/DetectLine.o: /home/heshan/NetBeansProjects/Line\ Detection/DetectLine.cpp
 	${MKDIR} -p ${OBJECTDIR}/_ext/1146eab9
