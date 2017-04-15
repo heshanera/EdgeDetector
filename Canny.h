@@ -13,7 +13,7 @@
 
 class Canny {
 public:
-    Canny(std::string inputImage, std::string outputImage, int smoothType);
+    Canny(std::string inputImage, std::string outputImage);
     Canny(const Canny& orig);
     virtual ~Canny();
     
@@ -26,6 +26,8 @@ public:
     int NonMaximizedSuppression();
     int gradientOrientation();
     int threshold();
+    int writeGrayScaleImage(std::string path);
+    int writeIntermediateImage(std::string path);
     int writeImage(std::string path);
     
     int printResultMatrix();

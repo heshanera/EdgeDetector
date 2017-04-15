@@ -10,7 +10,7 @@
 #include <Magick++.h>
 #include "Canny.h"
 
-Canny::Canny(std::string inputImage, std::string outputImage, int smoothType) {
+Canny::Canny(std::string inputImage, std::string outputImage) {
 
     initializeImage(inputImage);
     gaussianFilter();
@@ -22,7 +22,6 @@ Canny::Canny(std::string inputImage, std::string outputImage, int smoothType) {
     NonMaximizedSuppression();
     gradientOrientation();
     threshold();
-    
     writeImage(outputImage);
  
 }
@@ -355,8 +354,57 @@ int Canny::writeImage(std::string path){
     image.syncPixels();
     image.write(path);
     
+    return 0;   
+}
+
+int Canny::writeIntermediateImage(std::string path){
+
+    Magick::Image image;
+    image = this->img;
+    image.modifyImage();
+    image.type(Magick::TrueColorType);
+    ssize_t columns = this->width; 
+    Magick::PixelPacket *pixel_cache = image.getPixels(0,0,this->width, this->height); 
+    
+    for(int i = 0; i < this->width; i++)
+    {
+        for(int j = 0; j < this->height; j++)
+        {
+            float pVal = this->thinnedMatrix[j][i];
+            Magick::ColorGray gColor(pVal);
+            Magick::PixelPacket *pixel = pixel_cache+j*columns+i;    
+            *pixel = gColor;
+        } 
+    }
+    image.syncPixels();
+    image.write(path);
+    
     return 0; 
-   
+}
+
+int Canny::writeGrayScaleImage(std::string path){
+
+    Magick::Image image;
+    image = this->img;
+    image.modifyImage();
+    image.type(Magick::TrueColorType);
+    ssize_t columns = this->width; 
+    Magick::PixelPacket *pixel_cache = image.getPixels(0,0,this->width, this->height); 
+    
+    for(int i = 0; i < this->width; i++)
+    {
+        for(int j = 0; j < this->height; j++)
+        {
+            float pVal = this->imageMatrix[j][i];
+            Magick::ColorGray gColor(pVal);
+            Magick::PixelPacket *pixel = pixel_cache+j*columns+i;    
+            *pixel = gColor;
+        } 
+    }
+    image.syncPixels();
+    image.write(path);
+    
+    return 0;   
 }
 
 int Canny::printResultMatrix(){
