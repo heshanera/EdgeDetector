@@ -38,3 +38,6 @@ applying the kernels to the skeletonized image to detect the lines.
 ![intermediateImg](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyIntOut4.png) 
 ![outputImage](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyOut4.png)
 <br>
+![sourceImg](https://github.com/heshanera/lineDetection/blob/master/imgs/test6.GIF) 
+![intermediateImg](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyIntOut5.png) 
+![outputImage](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyOut5.png)

@@ -16,10 +16,19 @@ Canny::Canny(const Canny& orig) {}
 
 Canny::~Canny() {}
 
-int Canny::detectLines(std::string inputImage, std::string outputImage){
+int Canny::detectLines(std::string inputImage, std::string outputImage, int smoothType){
     initializeImage(inputImage);
-    //gaussianFilter();
-    meanFilter();
+    switch (smoothType)
+    {
+        case 1:
+            gaussianFilter();
+            break;
+        case 2:
+            meanFilter();
+            break;
+        default:
+            break;
+    }
     //printResultMatrix();
     gradients();
     //printGxMatrix();
@@ -61,12 +70,15 @@ int Canny::initializeImage(std::string path){
         this->width = w; this->height = h;
         this->range = range;
         
+        float pVal = 0;
         for(row = 0; row < h; row++)
         {
             for(column = 0; column < w; column++)
             {
                 Magick::Color color = pixels[w * row + column];
-                this->imageMatrix[row][column] = (color.redQuantum()/range)/256;
+                pVal = (color.redQuantum()/range)/256;
+                this->imageMatrix[row][column] = pVal;
+                this->resultMatrix[row][column] = pVal;
             }   
             //std::cout<< std::endl;
         }    
@@ -106,7 +118,6 @@ int Canny::gaussianFilter(){
             if ( (row >= (this->height)-5) || (column >= (this->width)-5) ){
             
                 this->resultMatrix[row][column] = this->imageMatrix[row][column];
-                std::cout<<this->imageMatrix[row][column]<<"\n";
             
             } else {
                 
@@ -151,6 +162,7 @@ int Canny::meanFilter(){
                 
             } else {
                 
+                
                 for(int kernelRow = 0; kernelRow < 3; kernelRow++)
                 {
                     for(int kernelColumn = 0; kernelColumn < 3; kernelColumn++)
@@ -159,7 +171,6 @@ int Canny::meanFilter(){
                     } 
                 }
                 this->resultMatrix[row][column] = ( pSum/9 );
-            
             } 
         } 
     } 

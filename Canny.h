@@ -17,7 +17,7 @@ public:
     Canny(const Canny& orig);
     virtual ~Canny();
     
-    int detectLines(std::string inputImage, std::string outputImage);
+    int detectLines(std::string inputImage, std::string outputImage, int smoothType);
     int initializeImage(std::string path);
     int grayScale();
     int gaussianFilter();
