@@ -33,7 +33,7 @@ int main(int argc,char **argv)
      * 
      */
     
-    std::string inputImage2 = "imgs/test3.GIF";
+    std::string inputImage2 = "imgs/test5.GIF";
     std::string outputImage2 = "imgs/testCanny.png";
     
     std::string outputImage5 = "imgs/result5.png";

@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <cmath>
 #include <Magick++.h>
 #include "Canny.h"
 
@@ -15,7 +16,13 @@ Canny::Canny(std::string inputImage, std::string outputImage, int smoothType) {
     gaussianFilter();
     meanFilter();
     //printResultMatrix();
+    gradients();
+    //printGxMatrix();
+    //printGyMatrix();
+    NonMaximizedSuppression();
+    gradientOrientation();
     threshold();
+    
     writeImage(outputImage);
  
 }
@@ -43,6 +50,14 @@ int Canny::initializeImage(std::string path){
 
         // creating the pixel matrix
         this->imageMatrix = new float*[h];for(int i = 0; i < h; ++i) this->imageMatrix[i] = new float[w];
+        this->resultMatrix = new float*[h];for(int i = 0; i < h; ++i) this->resultMatrix[i] = new float[w];
+        this->gYMatrix = new float*[h];for(int i = 0; i < h; ++i) this->gYMatrix[i] = new float[w];
+        this->gXMatrix = new float*[h];for(int i = 0; i < h; ++i) this->gXMatrix[i] = new float[w];
+        this->gradientMagnitudeMatrix = new float*[h];for(int i = 0; i < h; ++i) this->gradientMagnitudeMatrix[i] = new float[w];
+        this->gradientOrientationMatrix = new float*[h];for(int i = 0; i < h; ++i) this->gradientOrientationMatrix[i] = new float[w];
+        this->NonMaximizedSuppressionMatrix = new float*[h];for(int i = 0; i < h; ++i) this->NonMaximizedSuppressionMatrix[i] = new float[w];
+        this->thinnedMatrix = new float*[h];for(int i = 0; i < h; ++i) this->thinnedMatrix[i] = new float[w];
+        
         // storing meta data
         this->width = w; this->height = h;
         this->range = range;
@@ -84,8 +99,6 @@ int Canny::gaussianFilter(){
                                 { 1, 4,  7,  4,  1 }
                             };
     
-    this->resultMatrix = new float*[this->height];for(int i = 0; i < this->height; ++i) this->resultMatrix[i] = new float[this->width];
-    
     for(int row = 0; row < (this->height); row++)
     {
         for(int column = 0; column < (this->width); column++)
@@ -126,8 +139,6 @@ int Canny::meanFilter(){
                                 { 1, 1, 1 }
                             };
     
-    this->resultMatrix = new float*[this->height];for(int i = 0; i < this->height; ++i) this->resultMatrix[i] = new float[this->width];
-    
     
     for(int row = 0; row < (this->height); row++)
     {
@@ -155,7 +166,7 @@ int Canny::meanFilter(){
     return 0;
 }
 
-int Canny::differentiation(){
+int Canny::gradients(){
 
     
     /**
@@ -176,34 +187,134 @@ int Canny::differentiation(){
                             {  1,  1 },
                             { -1, -1 },
                         };
-     
-
-    
-    this->resultMatrix = new float*[this->height];for(int i = 0; i < this->height; ++i) this->resultMatrix[i] = new float[this->width];
-    
     
     for(int row = 0; row < (this->height); row++)
     {
         for(int column = 0; column < (this->width); column++)
         {
-            float pSum = 0;
-            if ( (row >= (this->height)-5) || (column >= (this->width)-5) ){
+            float pSum1 = 0, pSum2 = 0;
+            if ( (row >= (this->height)-2) || (column >= (this->width)-2) ){
+            
+                this->gXMatrix[row][column] = this->imageMatrix[row][column];
+                this->gYMatrix[row][column] = this->imageMatrix[row][column];
+            
+            } else {
+                
+                for(int kernelRow = 0; kernelRow < 2; kernelRow++)
+                {
+                    for(int kernelColumn = 0; kernelColumn < 2; kernelColumn++)
+                    {
+                        pSum1 += (float)(this->resultMatrix[row + kernelRow][column + kernelColumn]*Gx[kernelRow][kernelColumn]);
+                        pSum2 += (float)(this->resultMatrix[row + kernelRow][column + kernelColumn]*Gy[kernelRow][kernelColumn]);
+                    } 
+                }
+                //std::cout<<( pSum1+pSum2 )/2<<" ";
+                this->gXMatrix[row][column] = pSum1;
+                this->gYMatrix[row][column] = pSum2;
+            }        
+        } 
+    }
+   
+    float gX,gY;
+    for(int row = 0; row < (this->height); row++)
+    {
+        for(int column = 0; column < (this->width); column++)
+        {
+            float pSum1 = 0, pSum2 = 0;
+            if ( (row >= (this->height)-2) || (column >= (this->width)-2) ){
             
                 this->resultMatrix[row][column] = this->imageMatrix[row][column];
             
             } else {
                 
-                for(int kernelRow = 0; kernelRow < 5; kernelRow++)
-                {
-                    for(int kernelColumn = 0; kernelColumn < 5; kernelColumn++)
-                    {
-                        pSum += (float)(this->imageMatrix[row + kernelRow][column + kernelColumn]*kernel[kernelRow][kernelColumn]);
-                    } 
-                }
-                this->resultMatrix[row][column] = ( pSum/273 );
+                gX = this->gXMatrix[row][column];
+                gY = this->gYMatrix[row][column];
+                
+                gradientMagnitudeMatrix[row][column] = pow( (pow(gX,2)+pow(gY,2)),0.5 ); 
+                gradientOrientationMatrix[row][column] = arcTan(gX,gY);
             }        
         } 
-    }    
+    }
+    return 0;
+}
+
+float Canny::arcTan(float x, float y){
+    
+    float result;
+    int i = 1;
+    result = -i * ( log(x + i * y)-log( pow( (pow(x,2) + pow(y,2)), 0.5 ) ) );
+    return result;
+}
+
+int Canny::NonMaximizedSuppression(){
+
+    float localMax;
+    int xPos = 0,yPos = 0;
+    for(int row = 0; row < (this->height); row++)
+    {
+        for(int column = 0; column < (this->width); column++)
+        {
+            float pSum = 0;
+            if ( (row >= (this->height)-3) || (column >= (this->width)-3) ){
+            
+                this->resultMatrix[row][column] = this->imageMatrix[row][column];
+            
+            } else {
+                
+                xPos = 0;
+                yPos = 0;
+                for(int kernelRow = 0; kernelRow < 3; kernelRow++)
+                {
+                    for(int kernelColumn = 0; kernelColumn < 3; kernelColumn++)
+                    {
+                        if (this->gradientMagnitudeMatrix[row + kernelRow][column + kernelColumn] > localMax) { 
+                            localMax = this->gradientMagnitudeMatrix[row + kernelRow][column + kernelColumn];
+                            xPos = kernelRow; yPos = kernelColumn;
+                        }
+                    } 
+                }
+                
+                if ( (xPos == 0)&(yPos == 0)) {
+                    this->NonMaximizedSuppressionMatrix[row][column] = gradientMagnitudeMatrix[row][column];
+                    
+                }
+                else this->NonMaximizedSuppressionMatrix[row][column] = 0;
+                //std::cout<<NonMaximizedSuppressionMatrix[row][column];
+            } 
+        } 
+    } 
+    return 0;
+}
+
+int Canny::gradientOrientation(){
+
+    float left,right,top,bottom,curr;
+    for(int row = 0; row < (this->height); row++)
+    {
+        for(int column = 0; column < (this->width); column++)
+        {
+            if ( (row == 0)|| (column == 0) || (row == (this->height)-1) || (column == (this->width)-1) ){
+            
+                thinnedMatrix[row][column] = this->NonMaximizedSuppressionMatrix[row][column];
+            
+            } else {
+                
+                left = NonMaximizedSuppressionMatrix[row][column-1];
+                right = NonMaximizedSuppressionMatrix[row][column+1];
+                
+                top = NonMaximizedSuppressionMatrix[row-1][column];
+                bottom = NonMaximizedSuppressionMatrix[row+1][column];
+                
+                curr = NonMaximizedSuppressionMatrix[row][column];
+                
+                if ( (( left > curr ) || ( right > curr )) && ( ( top > curr ) || ( bottom > curr ) )) { 
+                    thinnedMatrix[row][column] = 0; 
+                } else { 
+                    thinnedMatrix[row][column] = NonMaximizedSuppressionMatrix[row][column]; 
+                }
+            } 
+        } 
+    } 
     return 0;
 }
 
@@ -214,8 +325,9 @@ int Canny::threshold(){
     {
         for(int column = 0; column < (this->width); column++)
         {
-            pVal = this->imageMatrix[row][column];
-            if (pVal > 0.5) pVal = 0; else pVal = 1;
+            pVal = this->thinnedMatrix[row][column];
+            //std::cout<<pVal<<"\n";
+            if (pVal < 0.05) pVal = 0; else pVal = 1;
             this->resultMatrix[row][column] = pVal;
         } 
     }
@@ -257,6 +369,62 @@ int Canny::printResultMatrix(){
         } 
         std::cout<< std::endl;
     }  
+    std::cout<<"\n\n\n\n";
     return 0;  
 }
 
+int Canny::printGxMatrix(){
+    
+    for(int row = 0; row < (this->height); row++)
+    {
+        for(int column = 0; column < (this->width); column++)
+        {
+            std::cout<<this->gXMatrix[row][column]<<" ";
+        } 
+        std::cout<< std::endl;
+    }  
+    std::cout<<"\n\n\n\n";
+    return 0;  
+}
+
+int Canny::printGyMatrix(){
+    
+    for(int row = 0; row < (this->height); row++)
+    {
+        for(int column = 0; column < (this->width); column++)
+        {
+            std::cout<<this->gYMatrix[row][column]<<" ";
+        } 
+        std::cout<< std::endl;
+    }  
+    std::cout<<"\n\n\n\n";
+    return 0;  
+}
+
+int Canny::printGmMatrix(){
+    
+    for(int row = 0; row < (this->height); row++)
+    {
+        for(int column = 0; column < (this->width); column++)
+        {
+            std::cout<<this->gYMatrix[row][column]<<" ";
+        } 
+        std::cout<< std::endl;
+    }  
+    std::cout<<"\n\n\n\n";
+    return 0;  
+}
+
+int Canny::printGoMatrix(){
+    
+    for(int row = 0; row < (this->height); row++)
+    {
+        for(int column = 0; column < (this->width); column++)
+        {
+            std::cout<<this->gYMatrix[row][column]<<" ";
+        } 
+        std::cout<< std::endl;
+    }  
+    std::cout<<"\n\n\n\n";
+    return 0;  
+}

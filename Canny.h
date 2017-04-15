@@ -21,15 +21,25 @@ public:
     int grayScale();
     int gaussianFilter();
     int meanFilter();
-    int differentiation();
+    int gradients();
+    float arcTan(float x, float y);
+    int NonMaximizedSuppression();
+    int gradientOrientation();
     int threshold();
     int writeImage(std::string path);
     
     int printResultMatrix();
+    int printGxMatrix();
+    int printGyMatrix();
+    int printGmMatrix();
+    int printGoMatrix();
     
 private:
     Magick::Image img;
-    float **imageMatrix,**resultMatrix;
+    float   **imageMatrix,**resultMatrix,
+            **gXMatrix,**gYMatrix,
+            **gradientMagnitudeMatrix,**gradientOrientationMatrix,
+            **NonMaximizedSuppressionMatrix, **thinnedMatrix;
     int width, height;
     double range;
 
