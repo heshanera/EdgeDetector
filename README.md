@@ -1,12 +1,10 @@
 # Line Detection
 line detection of images.
 
-## Initial Image
-![sourceImg](https://github.com/heshanera/lineDetection/blob/master/imgs/test1.png) 
-
 ## Skeletonization
 process of reducing foreground regions in a binary image.
 
+![sourceImg](https://github.com/heshanera/lineDetection/blob/master/imgs/test1.png) 
 ![skeletonizedImg](https://github.com/heshanera/lineDetection/blob/master/imgs/skdtest1.png)
 
 ## Convolution
