@@ -21,6 +21,7 @@ public:
     int grayScale();
     int gaussianFilter();
     int meanFilter();
+    int differentiation();
     int threshold();
     int writeImage(std::string path);
     

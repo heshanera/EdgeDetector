@@ -68,7 +68,6 @@ int Canny::initializeImage(std::string path){
 
 int Canny::gaussianFilter(){
 
-    
     /**
      *          | 1 4  7  4  1 |
      *          | 4 16 26 16 4 |
@@ -76,8 +75,7 @@ int Canny::gaussianFilter(){
      *          | 4 16 26 16 4 |
      *          | 1 4  7  4  1 |
      * 
-     **/ 
-    
+     **/     
     float kernel[5][5] =    {   
                                 { 1, 4,  7,  4,  1 },
                                 { 4, 16, 26, 16, 4 },
@@ -85,11 +83,8 @@ int Canny::gaussianFilter(){
                                 { 4, 16, 26, 16, 4 }, 
                                 { 1, 4,  7,  4,  1 }
                             };
-     
-
     
     this->resultMatrix = new float*[this->height];for(int i = 0; i < this->height; ++i) this->resultMatrix[i] = new float[this->width];
-    
     
     for(int row = 0; row < (this->height); row++)
     {
@@ -112,14 +107,12 @@ int Canny::gaussianFilter(){
                 this->resultMatrix[row][column] = ( pSum/273 );
             }        
         } 
-    } 
-    
+    }
     return 0;
 }
 
 int Canny::meanFilter(){
 
-    
     /**
      *          | 1 1 1 |
      *      1/9 | 1 1 1 |
@@ -132,8 +125,6 @@ int Canny::meanFilter(){
                                 { 1, 1, 1 },
                                 { 1, 1, 1 }
                             };
-     
-
     
     this->resultMatrix = new float*[this->height];for(int i = 0; i < this->height; ++i) this->resultMatrix[i] = new float[this->width];
     
@@ -161,7 +152,58 @@ int Canny::meanFilter(){
             } 
         } 
     } 
+    return 0;
+}
+
+int Canny::differentiation(){
+
     
+    /**
+     *     Gx= | -1  1 |
+     *         | -1  1 |
+     * 
+     *     Gy= |  1  1 |
+     *         | -1 -1 |
+     * 
+     **/ 
+    
+    float Gx[2][2] =    {   
+                            { -1, 1 },
+                            { -1, 1 },
+                        };
+    
+    float Gy[2][2] =    {   
+                            {  1,  1 },
+                            { -1, -1 },
+                        };
+     
+
+    
+    this->resultMatrix = new float*[this->height];for(int i = 0; i < this->height; ++i) this->resultMatrix[i] = new float[this->width];
+    
+    
+    for(int row = 0; row < (this->height); row++)
+    {
+        for(int column = 0; column < (this->width); column++)
+        {
+            float pSum = 0;
+            if ( (row >= (this->height)-5) || (column >= (this->width)-5) ){
+            
+                this->resultMatrix[row][column] = this->imageMatrix[row][column];
+            
+            } else {
+                
+                for(int kernelRow = 0; kernelRow < 5; kernelRow++)
+                {
+                    for(int kernelColumn = 0; kernelColumn < 5; kernelColumn++)
+                    {
+                        pSum += (float)(this->imageMatrix[row + kernelRow][column + kernelColumn]*kernel[kernelRow][kernelColumn]);
+                    } 
+                }
+                this->resultMatrix[row][column] = ( pSum/273 );
+            }        
+        } 
+    }    
     return 0;
 }
 
@@ -173,7 +215,7 @@ int Canny::threshold(){
         for(int column = 0; column < (this->width); column++)
         {
             pVal = this->imageMatrix[row][column];
-            if (pVal > 0.5) pVal = 1; else pVal = 0;
+            if (pVal > 0.5) pVal = 0; else pVal = 1;
             this->resultMatrix[row][column] = pVal;
         } 
     }
