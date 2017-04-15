@@ -10,10 +10,15 @@
 #include <Magick++.h>
 #include "Canny.h"
 
-Canny::Canny(std::string inputImage, std::string outputImage) {
+Canny::Canny() {}
 
+Canny::Canny(const Canny& orig) {}
+
+Canny::~Canny() {}
+
+int Canny::detectLines(std::string inputImage, std::string outputImage){
     initializeImage(inputImage);
-    gaussianFilter();
+    //gaussianFilter();
     meanFilter();
     //printResultMatrix();
     gradients();
@@ -23,12 +28,7 @@ Canny::Canny(std::string inputImage, std::string outputImage) {
     gradientOrientation();
     threshold();
     writeImage(outputImage);
- 
 }
-
-Canny::Canny(const Canny& orig) {}
-
-Canny::~Canny() {}
 
 int Canny::initializeImage(std::string path){
     
@@ -106,6 +106,7 @@ int Canny::gaussianFilter(){
             if ( (row >= (this->height)-5) || (column >= (this->width)-5) ){
             
                 this->resultMatrix[row][column] = this->imageMatrix[row][column];
+                std::cout<<this->imageMatrix[row][column]<<"\n";
             
             } else {
                 
@@ -147,7 +148,7 @@ int Canny::meanFilter(){
             if ( (row >= (this->height)-3) || (column >= (this->width)-3) ){
             
                 this->resultMatrix[row][column] = this->imageMatrix[row][column];
-            
+                
             } else {
                 
                 for(int kernelRow = 0; kernelRow < 3; kernelRow++)
@@ -256,7 +257,7 @@ int Canny::NonMaximizedSuppression(){
             float pSum = 0;
             if ( (row >= (this->height)-3) || (column >= (this->width)-3) ){
             
-                this->resultMatrix[row][column] = this->imageMatrix[row][column];
+                this->NonMaximizedSuppressionMatrix[row][column] = 0;//this->imageMatrix[row][column];
             
             } else {
                 

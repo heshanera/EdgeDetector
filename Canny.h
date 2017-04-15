@@ -13,10 +13,11 @@
 
 class Canny {
 public:
-    Canny(std::string inputImage, std::string outputImage);
+    Canny();
     Canny(const Canny& orig);
     virtual ~Canny();
     
+    int detectLines(std::string inputImage, std::string outputImage);
     int initializeImage(std::string path);
     int grayScale();
     int gaussianFilter();

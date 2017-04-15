@@ -14,10 +14,11 @@
 
 class DetectLine {
 public:
-    DetectLine(std::string inputImage, std::string outputImage, int kernelNo);
+    DetectLine();
     DetectLine(const DetectLine& orig);
     virtual ~DetectLine();
     
+    int getLines(std::string inputImage, std::string outputImage, int kernelNo);
     int initializeImage(std::string path);
     int writeImage(std::string path);
     int applyKernel(int kernelNO);

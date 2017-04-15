@@ -9,20 +9,20 @@
 #include "DetectLine.h"
 
 
-DetectLine::DetectLine(std::string inputImage, std::string outputImage, int kernelNo) {
-
-    initializeImage(inputImage);
-    applyKernel(kernelNo);
-    writeImage(outputImage);
-
-}
+DetectLine::DetectLine() {}
 
 DetectLine::DetectLine(const DetectLine& orig) {}
 
 DetectLine::~DetectLine() {}
 
+int DetectLine::getLines(std::string inputImage, std::string outputImage, int kernelNo){
+
+    initializeImage(inputImage);
+    applyKernel(kernelNo);
+    writeImage(outputImage);
+}
+
 int DetectLine::initializeImage(std::string path){
-    
     
     Magick::InitializeMagick(NULL);
     Magick::Image image(path);
@@ -34,7 +34,7 @@ int DetectLine::initializeImage(std::string path){
 
         int w = image.columns(),h = image.rows();
         int row = 0,column = 0;
-        int range = 2; //pow(2, image.modulusDepth());
+        int range = 256; //pow(2, image.modulusDepth());
         
         Magick::PixelPacket *pixels = image.getPixels(0, 0, w, h);
 
@@ -129,7 +129,7 @@ int DetectLine::writeImage(std::string path){
             // thresholding the values
             float pVal = this->resultMatrix[j][i];
             //std::cout<<pVal<<"\n";
-            if ( pVal > 3 ) { pVal = 1; }
+            if ( pVal > 2.8 ) { pVal = 1; }
             else pVal = 0;
             
             Magick::ColorGray gColor(pVal);

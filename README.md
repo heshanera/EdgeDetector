@@ -27,17 +27,14 @@ applying the kernels to the skeletonized image to detect the lines.
 ![outputImage](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyOut1.png)
 <br>
 ![sourceImg](https://github.com/heshanera/lineDetection/blob/master/imgs/test3.GIF) 
-![GrayImg](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyGrayOut2.png) 
 ![intermediateImg](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyIntOut2.png) 
 ![outputImage](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyOut2.png)
 <br>
 ![sourceImg](https://github.com/heshanera/lineDetection/blob/master/imgs/test4.GIF) 
-![GrayImg](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyGrayOut3.png) 
 ![intermediateImg](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyIntOut3.png) 
 ![outputImage](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyOut3.png)
 <br>
 ![sourceImg](https://github.com/heshanera/lineDetection/blob/master/imgs/test5.GIF) 
-![GrayImg](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyGrayOut4.png) 
 ![intermediateImg](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyIntOut4.png) 
 ![outputImage](https://github.com/heshanera/lineDetection/blob/master/imgs/cannyOut4.png)
 <br>
