@@ -16,7 +16,7 @@
 int main(int argc,char **argv) 
 { 
    
-    std::string inputImage = "imgs/test1.png"; 
+    std::string inputImage = "imgs/inputImages/lines2.gif";   //test1.png"; 
     std::string skeletonizdImage = "imgs/skdtest1.png"; 
     
     std::string outputImage1 = "imgs/result1.png",
@@ -33,29 +33,38 @@ int main(int argc,char **argv)
     dln.getLines(skeletonizdImage,outputImage4,3);
 
     
-    std::string canntIn1 = "imgs/test2.GIF",
-                canntIn2 = "imgs/test3.GIF",
-                canntIn3 = "imgs/test4.GIF",
-                canntIn4 = "imgs/test5.GIF",
-                canntIn5 = "imgs/test6.GIF";
+    std::string canntIn1 = "imgs/inputImages/i1.gif",
+                canntIn2 = "imgs/inputImages/i2.gif",
+                canntIn3 = "imgs/inputImages/i3.gif",
+                canntIn4 = "imgs/inputImages/i4.gif",
+                canntIn5 = "imgs/inputImages/i5.gif",
+                canntIn6 = "imgs/inputImages/i6.gif",
+                canntIn7 = "imgs/inputImages/i7.gif";    
+                
     
     std::string cannyGrayOut1 = "imgs/cannyGrayOut1.png",
                 cannyGrayOut2 = "imgs/cannyGrayOut2.png",
                 cannyGrayOut3 = "imgs/cannyGrayOut3.png",
                 cannyGrayOut4 = "imgs/cannyGrayOut4.png",
-                cannyGrayOut5 = "imgs/cannyGrayOut5.png";    
+                cannyGrayOut5 = "imgs/cannyGrayOut5.png",
+                cannyGrayOut6 = "imgs/cannyGrayOut6.png",
+                cannyGrayOut7 = "imgs/cannyGrayOut7.png";
     
     std::string cannyIntOut1 = "imgs/cannyIntOut1.png",
                 cannyIntOut2 = "imgs/cannyIntOut2.png",
                 cannyIntOut3 = "imgs/cannyIntOut3.png",
                 cannyIntOut4 = "imgs/cannyIntOut4.png",
-                cannyIntOut5 = "imgs/cannyIntOut5.png";
+                cannyIntOut5 = "imgs/cannyIntOut5.png",
+                cannyIntOut6 = "imgs/cannyIntOut6.png",
+                cannyIntOut7 = "imgs/cannyIntOut7.png";    
     
     std::string cannyOut1 = "imgs/cannyOut1.png",
                 cannyOut2 = "imgs/cannyOut2.png",
                 cannyOut3 = "imgs/cannyOut3.png",
                 cannyOut4 = "imgs/cannyOut4.png",
-                cannyOut5 = "imgs/cannyOut5.png";
+                cannyOut5 = "imgs/cannyOut5.png",
+                cannyOut6 = "imgs/cannyOut6.png",
+                cannyOut7 = "imgs/cannyOut7.png";
     
     Canny canny;
     
@@ -67,7 +76,7 @@ int main(int argc,char **argv)
     canny.writeGrayScaleImage(cannyGrayOut2);
     canny.writeIntermediateImage(cannyIntOut2);
     
-    canny.detectLines(canntIn3,cannyOut3,1);
+    canny.detectLines(canntIn3,cannyOut3,2);
     canny.writeGrayScaleImage(cannyGrayOut3);
     canny.writeIntermediateImage(cannyIntOut3);
     
@@ -75,9 +84,17 @@ int main(int argc,char **argv)
     canny.writeGrayScaleImage(cannyGrayOut4);
     canny.writeIntermediateImage(cannyIntOut4);
     
-    canny.detectLines(canntIn5,cannyOut5,0);
+    canny.detectLines(canntIn5,cannyOut5,2);
     canny.writeGrayScaleImage(cannyGrayOut5);
     canny.writeIntermediateImage(cannyIntOut5);
+    
+    canny.detectLines(canntIn6,cannyOut6,1);
+    canny.writeGrayScaleImage(cannyGrayOut6);
+    canny.writeIntermediateImage(cannyIntOut6);
+    
+    canny.detectLines(canntIn7,cannyOut7,2);
+    canny.writeGrayScaleImage(cannyGrayOut7);
+    canny.writeIntermediateImage(cannyIntOut7);
     
     return 0; 
 }

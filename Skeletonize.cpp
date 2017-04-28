@@ -23,8 +23,14 @@ Skeletonize::Skeletonize(std::string inputImage, std::string outputImage) {
         if (this->interiorPixels == 0) break;
     }    
     
-    getArticulationPointsPhase2();
-    removeBoundaryPixelsPhase2();
+    for(int i = 0; i < 20; i++){
+        getArticulationPointsPhase2();
+        removeBoundaryPixelsPhase2();
+    }
+    
+    for(int i = 0; i < 5; i++){
+    }
+    
     //printBoundaryPixelMatrix();
     //printReconfedMatrix();
     
