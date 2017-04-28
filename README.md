@@ -3,10 +3,13 @@ line detection of images.
 
 ## Skeletonization
 process of reducing foreground regions in a binary image.
-
-![sourceImg](https://github.com/heshanera/lineDetection/blob/master/imgs/inputImages/lines.gif) 
-![arrow](https://github.com/heshanera/lineDetection/blob/master/imgs/arw.png)
-![skeletonizedImg](https://github.com/heshanera/lineDetection/blob/master/imgs/skdtest1.png)
+<table>
+<tr>
+<td><img src="https://github.com/heshanera/lineDetection/blob/master/imgs/inputImages/lines.gif" alt="" > </td>
+<td><img src="https://github.com/heshanera/lineDetection/blob/master/imgs/arw.png" alt="" > </td>
+<td><img src="https://github.com/heshanera/lineDetection/blob/master/imgs/skdtest1.png" alt="" > </td>
+</tr>
+</table>
 
 ## Convolution
 applying the kernels to the skeletonized image to detect the lines.
@@ -15,10 +18,14 @@ applying the kernels to the skeletonized image to detect the lines.
 ![kernels](https://github.com/heshanera/lineDetection/blob/master/imgs/kernels.png)
 
 ##### Applying the 4 kernels
-![kernel1](https://github.com/heshanera/lineDetection/blob/master/imgs/result1.png) 
-![kernel2](https://github.com/heshanera/lineDetection/blob/master/imgs/result2.png)
-![kernel3](https://github.com/heshanera/lineDetection/blob/master/imgs/result3.png)
-![kernel4](https://github.com/heshanera/lineDetection/blob/master/imgs/result4.png) 
+<table>
+<tr>
+<td><img src="https://github.com/heshanera/lineDetection/blob/master/imgs/result1.png" alt="kernel1" > </td>
+<td><img src="https://github.com/heshanera/lineDetection/blob/master/imgs/result2.png" alt="kernel2" > </td>
+<td><img src="https://github.com/heshanera/lineDetection/blob/master/imgs/result3.png" alt="kernel3" > </td>
+<td><img src="https://github.com/heshanera/lineDetection/blob/master/imgs/result4.png" alt="kernel4" > </td>
+</tr>
+</table>
 
 ## Canny Operator
 
