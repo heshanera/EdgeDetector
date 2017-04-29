@@ -30,17 +30,6 @@ applying the kernels to the skeletonized image to detect the lines.
 ## Canny Operator
 
 <table>
-<tr>
-<td>
- <img src="https://github.com/heshanera/lineDetection/blob/master/imgs/inputImages/i7.gif" alt="src" >
-</td>
-<td>
- <img src="https://github.com/heshanera/lineDetection/blob/master/imgs/cannyIntOut7.png" alt="intm">
-</td>
-<td>
- <img src="https://github.com/heshanera/lineDetection/blob/master/imgs/cannyOut7.png" alt="out">
-</td>
-</tr>
 
 <tr>
 <td>
@@ -99,18 +88,6 @@ applying the kernels to the skeletonized image to detect the lines.
 </td>
 <td>
  <img src="https://github.com/heshanera/lineDetection/blob/master/imgs/cannyOut5.png" alt="out">
-</td>
-</tr>
-
-<tr>
-<td>
- <img src="https://github.com/heshanera/lineDetection/blob/master/imgs/inputImages/i6.gif" alt="src" >
-</td>
-<td>
- <img src="https://github.com/heshanera/lineDetection/blob/master/imgs/cannyIntOut6.png" alt="intm">
-</td>
-<td>
- <img src="https://github.com/heshanera/lineDetection/blob/master/imgs/cannyOut6.png" alt="out">
 </td>
 </tr>
 
