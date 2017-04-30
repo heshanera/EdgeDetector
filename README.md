@@ -1,5 +1,5 @@
 # Line Detection
-line detection of images.
+line detection and edge detection of images.
 
 ## Skeletonization
 process of reducing foreground regions in a binary image.
@@ -28,6 +28,14 @@ applying the kernels to the skeletonized image to detect the lines.
 </table>
 
 ## Canny Operator
+edge detection operator that uses a multi-stage algorithm to detect a wide range of edges in images
+
+#### steps in Canny edge detection algorithm:
+- Apply Gaussian filter to smooth the image in order to remove the noise
+- Find the intensity gradients of the image
+- Apply non-maximum suppression to get rid of spurious response to edge detection
+- Apply double threshold to determine potential edges
+- Track edge by hysteresis: Finalize the detection of edges by suppressing all the other edges that are weak and not connected to strong edges.
 
 <table>
 
