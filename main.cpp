@@ -40,7 +40,8 @@ int main(int argc,char **argv)
                 canntIn5 = "imgs/inputImages/i5.gif",
                 canntIn6 = "imgs/inputImages/i6.gif",
                 canntIn7 = "imgs/inputImages/i7.gif",
-                canntIn8 = "imgs/inputImages/i8.jpg";
+                canntIn8 = "imgs/inputImages/i8.jpg",
+                canntIn9 = "imgs/inputImages/i9.jpg";
                 
     
     std::string cannyGrayOut1 = "imgs/cannyGrayOut1.png",
@@ -50,7 +51,8 @@ int main(int argc,char **argv)
                 cannyGrayOut5 = "imgs/cannyGrayOut5.png",
                 cannyGrayOut6 = "imgs/cannyGrayOut6.png",
                 cannyGrayOut7 = "imgs/cannyGrayOut7.png",
-                cannyGrayOut8 = "imgs/cannyGrayOut8.png";
+                cannyGrayOut8 = "imgs/cannyGrayOut8.png",
+                cannyGrayOut9 = "imgs/cannyGrayOut9.png";
                 
     
     std::string cannyIntOut1 = "imgs/cannyIntOut1.png",
@@ -60,7 +62,8 @@ int main(int argc,char **argv)
                 cannyIntOut5 = "imgs/cannyIntOut5.png",
                 cannyIntOut6 = "imgs/cannyIntOut6.png",
                 cannyIntOut7 = "imgs/cannyIntOut7.png",
-                cannyIntOut8 = "imgs/cannyIntOut8.png"; 
+                cannyIntOut8 = "imgs/cannyIntOut8.png",
+                cannyIntOut9 = "imgs/cannyIntOut9.png"; 
     
     std::string cannyOut1 = "imgs/cannyOut1.png",
                 cannyOut2 = "imgs/cannyOut2.png",
@@ -69,7 +72,8 @@ int main(int argc,char **argv)
                 cannyOut5 = "imgs/cannyOut5.png",
                 cannyOut6 = "imgs/cannyOut6.png",
                 cannyOut7 = "imgs/cannyOut7.png",
-                cannyOut8 = "imgs/cannyOut8.png";
+                cannyOut8 = "imgs/cannyOut8.png",
+                cannyOut9 = "imgs/cannyOut9.png";
     
     Canny canny;
     
@@ -104,6 +108,10 @@ int main(int argc,char **argv)
     canny.detectLines(canntIn8,cannyOut8,1);
     canny.writeGrayScaleImage(cannyGrayOut8);
     canny.writeIntermediateImage(cannyIntOut8);
+    
+    canny.detectLines(canntIn9,cannyOut9,1);
+    canny.writeGrayScaleImage(cannyGrayOut9);
+    canny.writeIntermediateImage(cannyIntOut9);
     
     return 0; 
 }
