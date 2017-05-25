@@ -41,6 +41,18 @@ edge detection operator that uses a multi-stage algorithm to detect a wide range
 
 <tr>
 <td>
+ <img src="https://github.com/heshanera/lineDetection/blob/master/imgs/inputImages/i9.jpg" alt="src" >
+</td>
+<td>
+ <img src="https://github.com/heshanera/lineDetection/blob/master/imgs/cannyIntOut9.png" alt="intm">
+</td>
+<td>
+ <img src="https://github.com/heshanera/lineDetection/blob/master/imgs/cannyOut9.png" alt="out">
+</td>
+</tr>
+
+<tr>
+<td>
  <img src="https://github.com/heshanera/lineDetection/blob/master/imgs/inputImages/i1.gif" alt="src" >
 </td>
 <td>
