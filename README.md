@@ -111,4 +111,5 @@ edge detection operator that uses a multi-stage algorithm to detect a wide range
 </td>
 </tr>
 
+
 </table>

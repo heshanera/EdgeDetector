@@ -242,7 +242,7 @@ int Canny::gradients(){
                 gY = this->gYMatrix[row][column];
                 
                 gradientMagnitudeMatrix[row][column] = pow( (pow(gX,2)+pow(gY,2)),0.5 ); 
-                gradientOrientationMatrix[row][column] = arcTan(gX,gY);
+                //gradientOrientationMatrix[row][column] = arcTan(gX,gY);
             }        
         } 
     }
