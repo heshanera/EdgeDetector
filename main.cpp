@@ -10,9 +10,6 @@
 #include "Skeletonize.h"
 #include "Canny.h"
 
-/*
- * 
- */
 int main(int argc,char **argv) 
 { 
    

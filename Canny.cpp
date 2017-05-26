@@ -179,7 +179,6 @@ int Canny::meanFilter(){
 
 int Canny::gradients(){
 
-    
     /**
      *     Gx= | -1  1 |
      *         | -1  1 |
